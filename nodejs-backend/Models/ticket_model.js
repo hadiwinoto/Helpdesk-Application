@@ -41,7 +41,7 @@ module.exports = (Sequelize,connectMysql) => {
       }
       ,
       file_id : {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT                        
       },
       rating : {
         type: Sequelize.STRING

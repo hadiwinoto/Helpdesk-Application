@@ -1,6 +1,6 @@
 import React, { useState,Fragment,useEffect } from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBInput, MDBModalBody, 
-    MDBModalHeader, MDBModalFooter, MDBCol,MDBIcon, MDBRow,MDBAlert  } from 'mdbreact';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, 
+    MDBModalHeader, MDBModalFooter, MDBCol,MDBIcon, MDBRow  } from 'mdbreact';
     
 import GooglePlacesAutocomplete,{geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
 import { GlobalConsumer } from '../../context/context';
@@ -24,10 +24,9 @@ function ModalMapsPage(props) {
             setModal(false)
       }
       
-      // If Map already select on Auto Completed
+      // If Map already select on Auto CompleteW
       useEffect(()=>{
             if(value){
-                  console.log('value',value)
                   geocodeByAddress(value.label)
                   .then(results => getLatLng(results[0]))
                   
@@ -45,7 +44,7 @@ function ModalMapsPage(props) {
             
             setTimeout(()=>{
                   clearInterval(reps)
-            },1500)
+            },1000)
 
             closeModal();
       }

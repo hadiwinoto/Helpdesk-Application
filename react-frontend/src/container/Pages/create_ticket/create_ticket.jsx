@@ -2,11 +2,10 @@ import { MDBCol, MDBContainer, MDBRow,MDBAlert,MDBBreadcrumb ,MDBBreadcrumbItem,
          MDBIcon,MDBBtn,MDBCard,MDBCardTitle,MDBCardBody,MDBJumbotron,MDBInput } from 'mdbreact';
          
 import ModalMapsPage from '../../../component/modal/modal_maps_hook';
-import { geocodeByLatLng } from 'react-google-places-autocomplete';
-import FooterPage from '../../../component/footer/footerPage';
 import { GlobalConsumer } from '../../../context/context';
 import React,{ Fragment } from 'react';
-
+import Geocode from "react-geocode";
+import Swal from 'sweetalert2';
 
 
 import {Autocomplete} from '@material-ui/lab';
@@ -54,19 +53,6 @@ function getKeyProblem(a)
         }
     })
     return active
-}
-
-function getLocation(){
-    let getCurrentPosition = {}
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position)=>{
-            getCurrentPosition["latitude"] = position.coords.latitude
-            getCurrentPosition["longitude"] = position.coords.longitude
-        });
-        return getCurrentPosition
-    } else {
-        return "Geolocation is not supported by this browser.";
-    }
 }
 
 class createTicket extends React.Component {
@@ -184,6 +170,41 @@ handleValue(prop,step){
         }) 
     }
 
+    async setCurrentLocation (){
+        if (navigator.geolocation) 
+        {
+            let form = {...this.state.form};
+            
+            const position = await new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject);
+            });
+            
+            form['question_1'].latitude = position.coords.latitude
+            form['question_1'].longitude = position.coords.longitude
+            
+            this.setState({ form },()=>{
+                this.getAddress()
+            })
+        } else {
+            Swal.fire('Geolocation is not supported by this browser.','info')
+        }
+        
+    }
+    
+    async getAddress(){
+        Geocode.setApiKey("AIzaSyAhL_4LXSpRkQ1kEpUGyQ3V5oKGiN8Jv_c");
+        let form = {...this.state.form};
+        await Geocode.fromLatLng(form.question_1.latitude, form.question_1.longitude).then(
+            (response) => {
+              const address = response.results[0].formatted_address;
+              form['question_1'].address = address;
+              this.setState(form)
+            },
+            (error) => {
+              console.error(error);
+            });
+    }
+
     componentWillReceiveProps(){
         let form = {...this.state.form};
         let context = this.props.state; 
@@ -196,7 +217,7 @@ handleValue(prop,step){
   render() {
     let active = this.state;
     let steps = getSteps();
-    
+
     return (
         <Fragment>
             <MDBBreadcrumb color="indigo lighten-4">
@@ -384,7 +405,7 @@ handleValue(prop,step){
                                                     <MDBCol md="12" sm="12" className="mt-4">
                                                          <label>Location Problem</label>
                                                          <div className="text-right">
-                                                            <MDBBtn color="primary" size="sm" outline className="">
+                                                            <MDBBtn color="primary" size="sm" onClick={()=>this.setCurrentLocation()} outline className="">
                                                                 <MDBIcon icon="map-marker-alt" size="2x" />
                                                             </MDBBtn>
                                                             <ModalMapsPage/>

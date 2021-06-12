@@ -27,7 +27,7 @@ function ModalMapsPage(props) {
       // If Map already select on Auto Completed
       useEffect(()=>{
             if(value){
-                  console.log(value)
+                  console.log('value',value)
                   geocodeByAddress(value.label)
                   .then(results => getLatLng(results[0]))
                   
@@ -36,13 +36,18 @@ function ModalMapsPage(props) {
                         setZoom(17),
                   );
             }
-            console.log(props)
       })
 
       const onSetLocation = () =>{
-            props.dispatch({type:'setLocation', value:center})
-            closeModal()
+           const reps = setInterval(()=>{
+                  props.dispatch({type:'setLocation', value:{center:center,description:value.label}})
+            },500)
             
+            setTimeout(()=>{
+                  clearInterval(reps)
+            },1500)
+
+            closeModal();
       }
       
       function createMapOptions  (maps) {

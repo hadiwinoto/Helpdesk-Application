@@ -36,8 +36,8 @@ const Globalprovider = (Children) =>{
                 case 'profileNonActive':
                     return this.setState({ navbarProfileStatus : false })
                     break;
-                case 'setLocation':
-                    return this.setState({ locationProblem :  action.value})
+                case 'setLocation': 
+                    return this.setState({ locationProblem :  action.value.center, description: action.value.description})
                     break;
                 default:
                     break;

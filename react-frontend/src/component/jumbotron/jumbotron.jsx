@@ -127,7 +127,7 @@ class JumbotronPage extends React.Component {
             {
                this.state.roles.map(role =>{
                  return(
-                   <h4><MDBBadge pill color="light" className="ml-1 mt-2">{role.substr(5)}</MDBBadge></h4>
+                   <h4><MDBBadge pill color="light" className="ml-1 mt-2">{role.substr(0)}</MDBBadge></h4>
                  )
                })
              }

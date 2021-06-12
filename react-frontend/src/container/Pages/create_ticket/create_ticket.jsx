@@ -148,27 +148,6 @@ handleValue(prop,step){
     }))
   }
 
-  getLonglatModal(){
-    
-  }
-
-  componentDidMount(){      
-    let form = {...this.state.form};
-    let context = this.props.state; 
-    var runInterval = setInterval(()=>{
-        console.log("asddddddddddddddddddddddddddd",context.locationProblem)
-        if(context.locationProblem.length > 0){
-                form['question_1'].latitude = context.locationProblem.lat
-                form['question_1'].longitude = context.locationProblem.lng
-                this.setState({
-                    form
-                },()=>{
-                    clearInterval(runInterval)
-                })
-            }
-        },500)
-  }
-
   handleNext(step){
 
     let errors = this.state.error[`question_${step}`]
@@ -204,13 +183,20 @@ handleValue(prop,step){
             activeStep :0
         }) 
     }
+
+    componentWillReceiveProps(){
+        let form = {...this.state.form};
+        let context = this.props.state; 
+        form['question_1'].address = context.description
+        form['question_1'].latitude = context.locationProblem.lat
+        form['question_1'].longitude = context.locationProblem.lng
+        this.setState({ form })   
+    }
   
   render() {
     let active = this.state;
     let steps = getSteps();
-    console.log('form',active.form)
-    console.log('error',active.error)
-
+    
     return (
         <Fragment>
             <MDBBreadcrumb color="indigo lighten-4">

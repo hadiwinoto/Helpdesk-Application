@@ -40,7 +40,7 @@ componentDidMount(){
     // Check is registry with params, if no only check token header
     const params = this.props.match.params;
     if(params.username && params.token){
-        this.verifyAccount(this.props.match.params)
+        this.verifyAccount(params)
     }else{
         // Check Session IF not found, will to login 
         this.checkHeader()
@@ -74,10 +74,10 @@ verifyAccount(data){
         API.auth.verifyAccount(data)
         .then(res=>{
             // Get Roles
+            localStorage.setItem("user", JSON.stringify(res.userInfo));
             this.setState({
                 roles : JSON.parse(localStorage.getItem('user')).roles
             })
-            localStorage.setItem("user", JSON.stringify(res.userInfo));
             Swal.fire('Good job!', res.message,'success')
         })
         .catch(err=>{

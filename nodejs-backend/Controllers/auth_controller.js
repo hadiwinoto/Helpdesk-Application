@@ -13,7 +13,7 @@ function email_send (to,token,username) {
     var linkLocal = 'http://localhost:8000';
 
     const b64Encode = Buffer.from(token).toString('base64')
-    const link = `${links}/home/verify/${b64Encode}/${username}`;
+    const link = `${linkLocal}/home/verify/${b64Encode}/${username}`;
     const subject = 'Account Verification Complaint App';
     let html = "<h2>Verification address your Email</h2> <br>";
           html += "<a href="+link+" style='width:200px; font-size: 18px; color: white; text-align: center; text-decoration: none; padding: 10px; background:#314c69;'>Click Link For Activation Account</a>";

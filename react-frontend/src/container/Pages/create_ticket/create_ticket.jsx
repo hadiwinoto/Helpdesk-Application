@@ -6,6 +6,7 @@ import { GlobalConsumer } from '../../../context/context';
 import React,{ Fragment } from 'react';
 import Geocode from "react-geocode";
 import Swal from 'sweetalert2';
+import './style.css';
 
 
 import {Autocomplete} from '@material-ui/lab';
@@ -67,7 +68,7 @@ constructor(props){
     
 state = {
         selectedFiles: "",
-        activeStep : 2, 
+        activeStep : 0, 
         form : {    
             question_0 :{
                 category_complaint : "",
@@ -301,17 +302,56 @@ handleValue(prop,step){
                     <Fragment>   
                     <MDBRow>
                         <MDBCol className="text-center">
-                            <MDBJumbotron className="mt-1 h-100">
-
+                            <MDBJumbotron style={{"font-size":"12px","font-weight":"bold","background":"#E5E5E5","color":"#21293A"}} className="p-3 check">
+                                <MDBRow className="p-2">
+                                    <MDBCol md="12" sm="12" className="p-2 d-flex justify-content-between cols">
+                                        <div>Problem Category</div> <span>{active.form.question_0.category_complaint}</span>
+                                    </MDBCol>
+                                    <MDBCol md="12" sm="12" className="p-2 d-flex justify-content-between cols">
+                                        Priority <span>{active.form.question_0.priority}</span>
+                                    </MDBCol>
+                                </MDBRow>
+                                <MDBRow className="p-2">
+                                    <MDBCol md="12" sm="12" className="p-2 d-flex justify-content-between cols">
+                                        Trouble Time Problem <span>{active.form.question_1.trouble_time}</span>
+                                    </MDBCol>
+                                    <MDBCol md="12" sm="12" className="p-2 d-flex justify-content-between cols">
+                                        Address  <span className="w-75" style={{"text-align":"right"}}>{active.form.question_1.address}</span>
+                                    </MDBCol>
+                                </MDBRow>
+                                <MDBRow className="p-2">
+                                    <MDBCol md="12" sm="12" className="p-2 d-flex justify-content-between cols">
+                                        Customer Number <span>{active.form.question_1.trouble_time}</span>
+                                    </MDBCol>
+                                    <MDBCol md="12" sm="12" className="p-2 d-flex justify-content-between cols">
+                                        File Attachment <span>
+                                        <MDBTypography tag='h4' variant="h4-responsive">
+                                                <a href={active.form.question_2.file_id} size="sm" download={active.selectedFiles.length != 0 ? active.selectedFiles[0].name : ''}>{ active.selectedFiles.length != 0 ? active.selectedFiles[0].name : ''}</a>
+                                        </MDBTypography>
+                                        </span>
+                                    </MDBCol>
+                                </MDBRow>
+                                <MDBRow className="p-2">
+                                    <MDBCol md="6" sm="12" className="p-2 d-flex justify-content-between cols">
+                                        Detail Problem 
+                                    </MDBCol>
+                                    <MDBCol md="6" sm="12" className="p-2 d-flex justify-content-between cols">
+                                       <span style={{"text-align":"justify"}}>{active.form.question_1.description_complaint}</span>
+                                    </MDBCol>
+                                </MDBRow>
                             </MDBJumbotron>
-                        </MDBCol>
-                    </MDBRow> 
-                    <MDBRow>
-                        <MDBCol className="text-center mt-3">
-                            <MDBBtn onClick={()=>this.handleReset()} color="primary">
-                                    <MDBIcon icon="arrow-left" className="mr-1" />
-                                    Reset 
-                            </MDBBtn>
+                            <MDBRow className="mt-2 mb-4">
+                                    <MDBCol className="text-center">
+                                        <MDBBtn  size="sm" onClick={()=>this.handleReset()} color="primary">
+                                                <MDBIcon icon="arrow-left" className="mr-1" />
+                                                Back 
+                                        </MDBBtn>
+                                        <MDBBtn  size="sm" color="primary">
+                                                <MDBIcon icon="paper-plane" className="mr-2" />
+                                                Send Report 
+                                        </MDBBtn>
+                                    </MDBCol>
+                                </MDBRow> 
                         </MDBCol>
                     </MDBRow> 
                     </Fragment>
@@ -506,7 +546,6 @@ handleValue(prop,step){
                                                     <label className="btn btn-default">
                                                         <input type="file" name="file_id" onChange={(e)=>this.selectFile(e)} />
                                                     </label>
-                                                    {/* <p className="mt-3" style={{color:"#e74c3c"}}> * File Must be less 500mb </p> */}
                                                      <MDBTypography tag='h3' variant="h3-responsive" className="mt-3">
                                                             <a href={active.form.question_2.file_id} size="lg" download={active.selectedFiles.length != 0 ? active.selectedFiles[0].name : ''}>{ active.selectedFiles.length != 0 ? active.selectedFiles[0].name : ''}</a>
                                                      </MDBTypography>
@@ -516,14 +555,14 @@ handleValue(prop,step){
                                         }
                                     </MDBRow>
                                 </MDBCol>
-                                <MDBCol className="text-center mt-5">
-                                    <MDBBtn color="primary" disabled={active.activeStep === 0}
+                                <MDBCol className="text-center mt-4">
+                                    <MDBBtn color="primary" size="sm" disabled={active.activeStep === 0}
                                     onClick={()=>this.handleBack()} >
                                     <MDBIcon icon="arrow-left" className="mr-1" />
                                     Back 
                                     </MDBBtn>
 
-                                    <MDBBtn color="primary" onClick={()=>this.handleNext(active.activeStep)}>
+                                    <MDBBtn color="primary" size="sm" onClick={()=>this.handleNext(active.activeStep)}>
                                     <MDBIcon icon="arrow-right" className="mr-1" />
                                     Next 
                                     </MDBBtn>

@@ -12,7 +12,7 @@ import { MDBCol, MDBContainer, MDBRow } from 'mdbreact';
 import SpinnerPageFull from '../../../component/loading_page/loading.page';
 import FooterPage from '../../../component/footer/footerPage';
 import CardExample from '../../../component/card/card';
-import notification from './menu-img/notification.png'
+// import notification from './menu-img/notification.png'
 import coaching from './menu-img/coaching.png'
 import setting from './menu-img/setting.png'
 import broad from './menu-img/broadcast.png'
@@ -120,13 +120,13 @@ render() {
                 </div>
             </MDBCol>
         </MDBRow>
-        <MDBRow>
+        {/* <MDBRow>
             <MDBCol md="6" sm="12">
                 <div data-aos="fade-up">
                     <CardExample title="Notification" desc="Notification ticket update, and notification from helpdesk" img={notification}></CardExample>
                 </div>
             </MDBCol>
-        </MDBRow>
+        </MDBRow> */}
         </Fragment>
     )
     const ROLE_HELPDESK = (

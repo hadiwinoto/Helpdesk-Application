@@ -1,5 +1,5 @@
 import { MDBCol, MDBContainer, MDBRow,MDBAlert,MDBBreadcrumb ,MDBBreadcrumbItem,
-         MDBIcon,MDBBtn,MDBCard,MDBCardTitle,MDBCardBody,MDBJumbotron,MDBInput } from 'mdbreact';
+         MDBIcon,MDBBtn,MDBCard,MDBTypography ,MDBCardBody,MDBJumbotron,MDBInput } from 'mdbreact';
          
 import ModalMapsPage from '../../../component/modal/modal_maps_hook';
 import { GlobalConsumer } from '../../../context/context';
@@ -55,6 +55,8 @@ function getKeyProblem(a)
     return active
 }
 
+
+
 class createTicket extends React.Component {
 //ok
 constructor(props){
@@ -64,7 +66,8 @@ constructor(props){
 }
     
 state = {
-        activeStep : 1, 
+        selectedFiles: "",
+        activeStep : 2, 
         form : {    
             question_0 :{
                 category_complaint : "",
@@ -78,7 +81,7 @@ state = {
                 longitude : "",
                 latitude: "",
             },
-            question_3:{
+            question_2:{
                 file_id:""
             }
         },
@@ -95,8 +98,8 @@ state = {
                 longitude : "",
                 latitude: "",
             },
-            question_3:{
-                file_id:""
+            question_2:{
+                file_id:"",
             }
         }
 }
@@ -155,7 +158,7 @@ handleValue(prop,step){
         this.setState({
             activeStep : this.state.activeStep + 1
         })
-        window.scrollTo(0, 0)
+        // window.scrollTo(0, 0)
     }
   
   handleBack(){
@@ -214,10 +217,52 @@ handleValue(prop,step){
         this.setState({ form })   
     }
   
+    selectFile(event) {
+        if(event.target.files[0].size > 300000){
+            return Swal.fire('File Size must be less 500mb', '', 'info') 
+        }else{
+
+            this.setState({
+                selectedFiles: event.target.files
+            },()=>{
+                this.getBase64(event.target.files[0])
+                .then(result => {
+                    let form = {...this.state.form};
+                    form['question_2'].file_id = result
+                    this.setState({ form }) 
+                })
+                .catch(err => {
+                  alert(err)
+                });
+
+            })
+
+        }
+    }
+
+    getBase64 = async file => {
+        return await new Promise(resolve => {
+          let fileInfo;
+          let baseURL = "";
+          
+          let reader = new FileReader();
+
+            reader.readAsDataURL(file);
+    
+            reader.onload = () => {
+        
+            baseURL = reader.result;
+         
+            resolve(baseURL);
+          };
+        });
+      };
+
+
   render() {
     let active = this.state;
     let steps = getSteps();
-
+    console.log(active)
     return (
         <Fragment>
             <MDBBreadcrumb color="indigo lighten-4">
@@ -236,6 +281,8 @@ handleValue(prop,step){
                   <h6 className="mt-2">Click Send Report if form already correct</h6>
               </MDBAlert>
             )}
+            {
+                active.activeStep != steps.length && (
                 <MDBRow>
                     <MDBCol>
                         <Stepper activeStep={active.activeStep} alternativeLabel>
@@ -247,17 +294,26 @@ handleValue(prop,step){
                         </Stepper>
                     </MDBCol>
                 </MDBRow>
+                )
+            }
                 {/* form input */}
                 {active.activeStep === steps.length ? (
                     <Fragment>   
                     <MDBRow>
                         <MDBCol className="text-center">
+                            <MDBJumbotron className="mt-1 h-100">
+
+                            </MDBJumbotron>
+                        </MDBCol>
+                    </MDBRow> 
+                    <MDBRow>
+                        <MDBCol className="text-center mt-3">
                             <MDBBtn onClick={()=>this.handleReset()} color="primary">
                                     <MDBIcon icon="arrow-left" className="mr-1" />
                                     Reset 
                             </MDBBtn>
                         </MDBCol>
-                    </MDBRow>  
+                    </MDBRow> 
                     </Fragment>
                     ) : (
                     <Fragment>
@@ -446,9 +502,15 @@ handleValue(prop,step){
                                             {
                                             active.activeStep == 2 && (
                                                 <Fragment>
-                                                    <h5>
-                                                        send File
-                                                    </h5>
+                                                    <MDBCol className="mt-3 text-center">
+                                                    <label className="btn btn-default">
+                                                        <input type="file" name="file_id" onChange={(e)=>this.selectFile(e)} />
+                                                    </label>
+                                                    {/* <p className="mt-3" style={{color:"#e74c3c"}}> * File Must be less 500mb </p> */}
+                                                     <MDBTypography tag='h3' variant="h3-responsive" className="mt-3">
+                                                            <a href={active.form.question_2.file_id} size="lg" download={active.selectedFiles.length != 0 ? active.selectedFiles[0].name : ''}>{ active.selectedFiles.length != 0 ? active.selectedFiles[0].name : ''}</a>
+                                                     </MDBTypography>
+                                                    </MDBCol>
                                                 </Fragment>
                                             )
                                         }

@@ -116,7 +116,17 @@ render() {
             </MDBCol>
             <MDBCol md="6" sm="12">
                 <div data-aos="fade-up">
-                    <CardExample title="Complaint History" desc="Display History Complaint" img={audit}></CardExample>
+                <MDBCol className="w-100">
+                    <MDBCard className="mt-3">
+                                <MDBCardImage className="img-fluid mx-auto w-50 mt-4 mb-4" src={audit}
+                                waves />
+                                <MDBCardBody className="text-center">
+                                <MDBCardTitle>Complaint History</MDBCardTitle>
+                                <MDBCardText>Display History Complaint</MDBCardText>
+                                <MDBBtn gradient="blue" onClick={()=>this.toListTicket()} className="btn-lg btn-block">Open</MDBBtn>
+                                </MDBCardBody>
+                    </MDBCard>
+                </MDBCol>
                 </div>
             </MDBCol>
         </MDBRow>

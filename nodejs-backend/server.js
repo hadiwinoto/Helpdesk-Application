@@ -36,13 +36,15 @@ function initial() {
     });
 }
 
+
+app.use(bodyParser({limit: '500mb'}));
 // parse requests of content-type: application/json
 app.use(bodyParser.json());
 // parse requests of content-type: application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
 var corsOptions = {
-  origin: "http://localhost:8000/"
+  origin: "http://localhost:8000"
 };
 
 app.use(cors());

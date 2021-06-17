@@ -4,9 +4,10 @@ import { GlobalConsumer } from '../../../context/context';
 import authHeader from '../../../services/authHeader';
 
 import { MDBTabPane, MDBTabContent, MDBNav, MDBNavItem, MDBNavLink } from "mdbreact";
-import { MDBInput,MDBJumbotron, MDBBadge,MDBBtn, MDBIcon  } from "mdbreact";
+import { MDBInput,MDBJumbotron, MDBBadge,MDBBtn, MDBIcon,MDBTypography  } from "mdbreact";
 import { MDBBreadcrumb, MDBBreadcrumbItem } from "mdbreact";
 import { MDBCol, MDBContainer, MDBRow } from 'mdbreact';
+import { Rating } from '@material-ui/lab';
 import Swal from 'sweetalert2';
 import moment from 'moment'
 
@@ -14,9 +15,9 @@ import SpinnerPageFull from '../../../component/loading_page/loading.page';
 import ModalResolvedPage from '../../../component/modal/modal_resolved';
 import ModalHandlePage from '../../../component/modal/modal_handle';
 import ModalUpdatePage from '../../../component/modal/modal_update';
+import ModalClosePage from '../../../component/modal/modal_close';
 import PanelPage from '../../../component/panel_page/panel_page';
 import FooterPage from '../../../component/footer/footerPage';
-import RatingPage from '../../../component/rating/rating';
 import API from '../../../services';
 import './detail_ticket.css';
 
@@ -49,7 +50,7 @@ class DetailTicket extends React.Component {
 
   getTicket(){
     API.master.getOneTicket({ticket_id:this.props.match.params.id},authHeader()).then(res=>{
-      if(res.status == 1){
+      if(res.status){
         this.setState({
           ticket: res.data
         },()=>{
@@ -78,6 +79,7 @@ class DetailTicket extends React.Component {
   }
   
   render() {
+       let session = JSON.parse(localStorage.getItem('user'));
        let data = this.state.ticket;
        let update_info_model = data.update_info_model;
        let update_list = [];    
@@ -123,7 +125,7 @@ class DetailTicket extends React.Component {
                     <h5>Status :<MDBBadge color="primary" className="ml-2">{data.ticket_status}</MDBBadge></h5>
                   </MDBCol>
                   <MDBCol>
-                    { data.ticket_status =='Close' &&  (<RatingPage/>) }
+                    { data.ticket_status =='Close' &&  ( <Rating name="read-only" size="large" value={data.rating} readOnly />) }
                   </MDBCol>
                   </MDBRow>
                   <MDBRow>
@@ -156,19 +158,42 @@ class DetailTicket extends React.Component {
                       </MDBCol>
                       <MDBCol sm="6" md="6">
                           <MDBInput label="Close Time" hint={data.close_time == null ? '-' : moment(data.close_time).format('YYYY-MM-DD hh:mm:ss')} disabled type="text" />
-                      </MDBCol>      
-                      <MDBCol sm="12" md="12" className="mt-3">
-                        <div className="text-center">
-                          <MDBBtn color="primary" onClick={()=>this.goListTickets()}>
-                            <MDBIcon icon="arrow-left" className="mr-1" /> Back
-                          </MDBBtn>
-                          { data.ticket_status == 'Open' && ( <ModalHandlePage data={data}/> ) }
-                          { data.ticket_status == 'Process' && ( <ModalUpdatePage data={data}/> ) }
-                          { data.ticket_status == 'Process' && ( <ModalResolvedPage data={data}/> ) }
-                          { data.ticket_status == 'Update' && ( <ModalUpdatePage data={data}/> ) }
-                          { data.ticket_status == 'Update' && ( <ModalResolvedPage data={data}/> ) }
-                        </div>
-                      </MDBCol>
+                      </MDBCol>   
+                      <MDBCol sm="6" md="6">
+                          <label className="mb-2">
+                            File Attachment
+                          </label>
+                        <MDBTypography tag='h4' variant="h4-responsive">
+                                    <a href={data.file_id} size="sm" download={data.file_id != '' ? new Date().getTime() : ''}>{ data.file_id != '' ? new Date().getTime()  : ''}</a>
+                        </MDBTypography>
+                      </MDBCol>    
+                      { data.ticket_status == 'Resolved' && (session.roles.includes("ROLE_COMPLAINER") || session.roles.includes("ROLE_ADMIN")) && ( 
+                        <MDBCol sm="12" md="12" className="mt-3">
+                          <div className="text-center">
+                              <ModalClosePage data={data}/>
+                              {/* <MDBBtn color="primary">
+                                  <MDBIcon icon="reply" className="mr-1" /> Reopen
+                              </MDBBtn>  */}
+                          </div>
+                        </MDBCol>
+                       )
+                      }
+                      {
+                        (session.roles.includes("ROLE_ADMIN") || session.roles.includes("ROLE_HELPDESK")) && (
+                          <MDBCol sm="12" md="12" className="mt-3">
+                            <div className="text-center">
+                              <MDBBtn color="primary" onClick={()=>this.goListTickets()}>
+                                <MDBIcon icon="arrow-left" className="mr-1" /> Back
+                              </MDBBtn>
+                              { data.ticket_status == 'Open' && ( <ModalHandlePage data={data}/> ) }
+                              { data.ticket_status == 'Process' && ( <ModalUpdatePage data={data}/> ) }
+                              { data.ticket_status == 'Process' && ( <ModalResolvedPage data={data}/> ) }
+                              { data.ticket_status == 'Update' && ( <ModalUpdatePage data={data}/> ) }
+                              { data.ticket_status == 'Update' && ( <ModalResolvedPage data={data}/> ) }
+                            </div>
+                          </MDBCol>
+                        )
+                      }
                   </MDBRow>
                 </MDBJumbotron>
                 </MDBTabPane>

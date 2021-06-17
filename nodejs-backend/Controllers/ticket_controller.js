@@ -22,7 +22,7 @@ exports.create = (req, res) => {
         uid : req.body.uid,
         create_time : req.body.create_time,
         update_time : req.body.update_time,
-        title : req.body.title,
+        title : `[${req.body.category_complant}] (${req.body.priority}) - ${req.body.ticket_id}`,
         category_complant : req.body.category_complant,
         trouble_time : req.body.trouble_time,
         description_complaint : req.body.description_complaint,
@@ -30,9 +30,12 @@ exports.create = (req, res) => {
         msisdn : req.body.msisdn,
         file_id : req.body.file_id,
         target_troubleshoot : req.body.target_troubleshoot,
-        ticket_status : req.body.ticket_status,
+        ticket_status : "Open",
         resolved_time : req.body.resolved_time,
-        close_time : req.body.close_time
+        close_time : req.body.close_time,
+        priority: req.body.priority,
+        longitude: req.body.longitude,
+        latitude: req.body.latitude,
     };
 
     Ticket.create(ticket)

@@ -147,6 +147,7 @@ class ListTickets extends React.Component {
     let temp = '*'
     let listPage = [];
     let state = this.state;
+    let session = JSON.parse(localStorage.getItem('user'));
     for(var i = 1;i <= state.totalPages; i++){ 
      if(i - 1 == state.currentPage){
        listPage.push(<MDBPageItem active><MDBPageNav>{i}</MDBPageNav></MDBPageItem>)
@@ -154,6 +155,7 @@ class ListTickets extends React.Component {
        listPage.push(<MDBPageItem onClick={(event)=>this.changePage(event)}><MDBPageNav>{i}</MDBPageNav></MDBPageItem>)
      }
     }
+
     return (
         <Fragment>
             <div data-aos="fade-right">
@@ -187,16 +189,19 @@ class ListTickets extends React.Component {
                 </MDBDropdown>
               </MDBFormInline>
             </MDBCol>
-            <MDBCol sm="12">
-            <div class="custom-control custom-checkbox ml-4">
-              <input type="checkbox" name="handleyou" 
-              value={JSON.parse(localStorage.getItem('user')).username} 
-              onChange={(event)=> this.handleYou(event)} class="custom-control-input" id="defaultChecked2"/>
-              <label class="custom-control-label" for="defaultChecked2">Handle By You</label>
-            </div>
-            </MDBCol>
+            {
+              session.roles.includes("ROLE_ADMIN") && (
+                <MDBCol sm="12">
+                <div class="custom-control custom-checkbox ml-4">
+                  <input type="checkbox" name="handleyou" 
+                  value={session.username} 
+                  onChange={(event)=> this.handleYou(event)} class="custom-control-input" id="defaultChecked2"/>
+                  <label class="custom-control-label" for="defaultChecked2">Handle By You</label>
+                </div>
+                </MDBCol>
+              )
+            }
             <MDBCol >
-           
             {this.state.loader && (<SpinnerPageFull/>)}
                
               {this.state.nodata && (

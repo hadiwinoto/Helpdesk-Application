@@ -1,9 +1,12 @@
 import { MDBCol, MDBContainer, MDBRow,MDBAlert,MDBBreadcrumb ,MDBBreadcrumbItem,
          MDBIcon,MDBBtn,MDBCard,MDBTypography ,MDBCardBody,MDBJumbotron,MDBInput } from 'mdbreact';
          
+import SpinnerPageFull from '../../../component/loading_page/loading.page';
 import ModalMapsPage from '../../../component/modal/modal_maps_hook';
 import { GlobalConsumer } from '../../../context/context';
+import authHeader from '../../../services/authHeader';
 import React,{ Fragment } from 'react';
+import API from '../../../services';
 import Geocode from "react-geocode";
 import Swal from 'sweetalert2';
 import './style.css';
@@ -26,15 +29,12 @@ function validateForm (errors) {
     return valid;
 }
   
-
 function getSteps() {
     return ['Question 1', 'Question 2','Send file'];
 }
 
 const category = [
     {title:"Tower Telecomunication"},
-    {title:"Natural Health Supply"},
-    {title:"Pharmaceuticals Inc"},
     {title:"Return Materials"}
 ]
 
@@ -59,7 +59,7 @@ function getKeyProblem(a)
 
 
 class createTicket extends React.Component {
-//ok
+
 constructor(props){
         super(props)
         window.scrollTo(0, 0)
@@ -67,11 +67,13 @@ constructor(props){
 }
     
 state = {
+        oader : false,
         selectedFiles: "",
         activeStep : 0, 
         form : {    
             question_0 :{
-                category_complaint : "",
+                ticket_id :"",
+                category_complant : "",
                 priority : "",
             },
             question_1 :{
@@ -88,7 +90,7 @@ state = {
         },
         error : {
             question_0 :{
-                category_complaint : "",
+                category_complant : "",
                 priority : "",
             },
             question_1 :{
@@ -114,7 +116,7 @@ handleValue(prop,step){
     let {name,value} = prop.target
     let valueCheck = value ? value : ''
  
-    if(name == 'category_complaint' && valueCheck.length == 0){
+    if(name == 'category_complant' && valueCheck.length == 0){
         errors[stepObject][name] = `Category Complain cannot be empty`
     }else if (name == 'priority' && valueCheck.length == 0){
         errors[stepObject][name] = `Priority cannot be empty`
@@ -159,7 +161,6 @@ handleValue(prop,step){
         this.setState({
             activeStep : this.state.activeStep + 1
         })
-        // window.scrollTo(0, 0)
     }
   
   handleBack(){
@@ -209,6 +210,17 @@ handleValue(prop,step){
             });
     }
 
+    componentDidMount(){
+        this.getCodeID()
+    }
+    
+    getNumberShort = (count) =>{
+        let str = "" + count
+        let pad = "0000000"
+        let ans = pad.substring(0, pad.length - str.length) + str
+        return ans
+    }
+
     componentWillReceiveProps(){
         let form = {...this.state.form};
         let context = this.props.state; 
@@ -241,6 +253,41 @@ handleValue(prop,step){
         }
     }
 
+    getCodeID = async () =>{
+        
+        let date = new Date();
+        let dateFormat = date.getDate() < 10 ? '0'+date.getDate() : date.getDate()
+        let monthFormat = date.getMonth() < 10 ? '0'+date.getMonth() : date.getMonth()
+        let yearFormat = date.getFullYear();
+        let dateCode = yearFormat+monthFormat+dateFormat
+        
+        let initial = 'COP'
+        let codeFirst = `${initial}-${dateCode}-${this.getNumberShort(1)}`
+        let newPO,arrayId;
+
+        let form = {...this.state.form}
+
+        await API.master.getTickets('', authHeader()).then(response=>{
+            if(response.data.tickets.length > 0){
+                arrayId = response.data.tickets[0].ticket_id.split("-")
+                  if(arrayId[1] === dateCode){
+                      newPO = `${initial}-${dateCode}-${this.getNumberShort(parseInt(arrayId[2])+1)}` 
+                  }else{
+                      newPO = `${initial}-${dateCode}-${this.getNumberShort(1)}` 
+                  }
+                  form['question_0'].ticket_id = newPO
+                  this.setState({form})
+              }else{
+                  form['question_0'].ticket_id = codeFirst
+                  this.setState({form})
+              }
+      
+          }).catch((error) => {
+              alert(error)
+          })
+          
+      }
+
     getBase64 = async file => {
         return await new Promise(resolve => {
           let fileInfo;
@@ -258,14 +305,46 @@ handleValue(prop,step){
           };
         });
       };
-
+    
+      sendReport(){
+        let getReport = this.state;
+        this.setState({loader:true})
+        Swal.fire({
+            title: 'Do you want to Send Report?',
+            icon : 'info',
+            showCancelButton: true,
+            confirmButtonText: `Submit`,
+            }).then((result) => {
+            if(result.isConfirmed) {
+                let sendObjt  = {}; 
+                Object.values(getReport.form).forEach(object =>{
+                    for(let key in object){
+                      sendObjt[key] = object[key];
+                    }
+                })
+               API.master.createTicket(sendObjt,authHeader()).then(res=>{
+                    Swal.fire('Send Successfully', '', 'success')
+                    setTimeout(()=>{    
+                        this.props.history.push(`/detail-ticket/${getReport.form.question_0.ticket_id}`);
+                    },1000)
+               }).catch(err=>{
+                   alert(err)
+               })
+            }
+        })    
+      }
 
   render() {
     let active = this.state;
     let steps = getSteps();
-    console.log(active)
+    console.log(active.form.question_0)
     return (
         <Fragment>
+            {
+                active.loader && (
+                    <SpinnerPageFull/>
+                )
+            }
             <MDBBreadcrumb color="indigo lighten-4">
               <MDBContainer className="d-flex">
                 <MDBBreadcrumbItem appendIcon icon="caret-right">Home</MDBBreadcrumbItem>
@@ -281,6 +360,7 @@ handleValue(prop,step){
                   </div>
                   <h6 className="mt-2">Click Send Report if form already correct</h6>
               </MDBAlert>
+              
             )}
             {
                 active.activeStep != steps.length && (
@@ -305,7 +385,7 @@ handleValue(prop,step){
                             <MDBJumbotron style={{"font-size":"12px","font-weight":"bold","background":"#E5E5E5","color":"#21293A"}} className="p-3 check">
                                 <MDBRow className="p-2">
                                     <MDBCol md="12" sm="12" className="p-2 d-flex justify-content-between cols">
-                                        <div>Problem Category</div> <span>{active.form.question_0.category_complaint}</span>
+                                        <div>Problem Category</div> <span>{active.form.question_0.category_complant}</span>
                                     </MDBCol>
                                     <MDBCol md="12" sm="12" className="p-2 d-flex justify-content-between cols">
                                         Priority <span>{active.form.question_0.priority}</span>
@@ -321,7 +401,7 @@ handleValue(prop,step){
                                 </MDBRow>
                                 <MDBRow className="p-2">
                                     <MDBCol md="12" sm="12" className="p-2 d-flex justify-content-between cols">
-                                        Customer Number <span>{active.form.question_1.trouble_time}</span>
+                                        Customer Number <span>{active.form.question_1.msisdn}</span>
                                     </MDBCol>
                                     <MDBCol md="12" sm="12" className="p-2 d-flex justify-content-between cols">
                                         File Attachment <span>
@@ -342,11 +422,11 @@ handleValue(prop,step){
                             </MDBJumbotron>
                             <MDBRow className="mt-2 mb-4">
                                     <MDBCol className="text-center">
-                                        <MDBBtn  size="sm" onClick={()=>this.handleReset()} color="primary">
+                                        <MDBBtn size="sm" onClick={()=>this.handleReset()} color="primary">
                                                 <MDBIcon icon="arrow-left" className="mr-1" />
                                                 Back 
                                         </MDBBtn>
-                                        <MDBBtn  size="sm" color="primary">
+                                        <MDBBtn size="sm" onClick={()=>this.sendReport()} color="primary">
                                                 <MDBIcon icon="paper-plane" className="mr-2" />
                                                 Send Report 
                                         </MDBBtn>
@@ -376,7 +456,7 @@ handleValue(prop,step){
                                                 </div>
                                                 ) : (
                                                  <MDBAlert color="primary" className="d-flex justify-content-between">
-                                                    <h5 className="mt-2 w-75">{active.form.question_0.category_complaint} - {active.form.question_0.priority}</h5>
+                                                    <h5 className="mt-2 w-75">{active.form.question_0.category_complant} - {active.form.question_0.priority}</h5>
                                                     
                                                     <MDBIcon icon="broadcast-tower" className="mt-1" size="2x"/>
                                                 </MDBAlert>
@@ -393,17 +473,17 @@ handleValue(prop,step){
                                                     <Autocomplete
                                                         id="combo-box-demo"
                                                         className = "mt-3"
-                                                        name="category_complaint"
+                                                        name="category_complant"
                                                         options={category}
                                                         getOptionLabel={(option) => option.title}
                                                         style={{ width: "100%" }}
                                                         size="small"
-                                                        defaultValue={category[getKeyProblem(active.form.question_0.category_complaint)]}
+                                                        defaultValue={category[getKeyProblem(active.form.question_0.category_complant)]}
                                                         onChange={(event,value)=>{
                                                             let val = value ? value : {title:''}
                                                             let send = {
                                                                 target: {
-                                                                    name : 'category_complaint',
+                                                                    name : 'category_complant',
                                                                     value : val.title
                                                                 }
                                                             }
@@ -414,10 +494,10 @@ handleValue(prop,step){
                                                     </MDBCol>
                                                     <MDBCol sm="12" md="12">
                                                     {
-                                                        active.error.question_0.category_complaint.length > 0 && 
+                                                        active.error.question_0.category_complant.length > 0 && 
                                                             <div data-aos="fade-top">
                                                             <MDBAlert color="danger" className="p-2 mt-3 d-flex justify-content-between">
-                                                            {active.error.question_0.category_complaint}
+                                                            {active.error.question_0.category_complant}
                                                             <MDBIcon icon="info" className="mt-1" size="1x"/>
                                                             </MDBAlert>
                                                             </div>

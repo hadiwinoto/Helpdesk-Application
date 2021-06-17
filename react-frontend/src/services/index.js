@@ -14,13 +14,15 @@ const homeApi = (data) => Get(`api/home`,false,true,data)
 const userInfo = (data) => Get(`api/users/${data.username}`,false)
 // ALL Tickets
 const getTickets = (data,header) => Get(`api/tickets`,false,true,header,data)
+// Create Ticket
+const createTicket = (data,header) => Post(`api/tickets/`,false,true,header,data)
 // Get One Ticket
 const getOneTicket = (data,header) => Get(`api/tickets/${data.ticket_id}`,false,true,header)
 // Process Ticket
 const handleTicket = (data,header) => Post(`api/handle-ticket/handle?ticket_id=${data.ticket_id}`,false,true,header,data)
 const updateTicket = (data,header) => Post(`api/handle-ticket/update?ticket_id=${data.ticket_id}`,false,true,header,data)
 const resolvedTicket = (data,header) => Post(`api/handle-ticket/resolved?ticket_id=${data.ticket_id}`,false,true,header,data)
-
+const closeTicket = (data,header) => Post(`api/handle-ticket/close?ticket_id=${data.ticket_id}`,false,true,header,data)
 // Export
 const API ={
     auth: {
@@ -34,12 +36,14 @@ const API ={
     master :{
         userInfo,
         getTickets,
-        getOneTicket
+        getOneTicket,
+        createTicket
     },
     processTicket:{
         handleTicket,
         updateTicket,
-        resolvedTicket
+        resolvedTicket,
+        closeTicket
     }
 }
 

@@ -65,8 +65,8 @@ exports.verify = async (req,res)=>{
             }).then(update =>{
                 
                 var token = jwt.sign({id:req.query.username},config.secret,{
-                    // expiresIn: 86400 // 24 hours
-                    expiresIn: 3600 // 1 hours
+                    expiresIn: 86400 // 24 hours
+                    // expiresIn: 3600 // 1 hours
                     // expiresIn: 500
                 });
 
@@ -78,7 +78,7 @@ exports.verify = async (req,res)=>{
                              username: user.username,
                              email:user.email,
                              accessToken: token,
-                             roles: [data[0].name]
+                             roles: ['ROLE_'+data[0].name.toUpperCase()]
                          }
                         })
 

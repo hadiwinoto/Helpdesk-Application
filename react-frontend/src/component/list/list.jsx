@@ -9,6 +9,7 @@ class PanelPage extends React.Component {
 
 render(){
     let data = this.props.data;
+    let session = JSON.parse(localStorage.getItem('user'));
     return (
     <div data-aos="fade-up">
     <MDBContainer>
@@ -18,8 +19,14 @@ render(){
           <MDBCardText style={{color:'#FFFFFF'}} className="w-80 mt-3">
             <h5>{data.category_complant}</h5>
           </MDBCardText>
-          <div className="d-flex justify-content-between">
-          <h6>{data.user_handler == JSON.parse(localStorage.getItem('user')).username ? 'by You' : data.user_handler ||  'Not Handle yet' }</h6> 
+          <div className={session.roles.includes("ROLE_ADMIN") ? 'd-flex justify-content-between' : 'd-flex justify-content-end' }>
+
+          {
+            session.roles.includes("ROLE_ADMIN") && (
+              <h6>{data.user_handler == session.username ? 'by You' : data.user_handler ||  'Not Handle yet' }</h6> 
+            )
+          } 
+          
           <h4><MDBBadge pill color="light" style={{width:'100px'}}>{data.ticket_status} </MDBBadge></h4>
           </div>
         </MDBCardBody>

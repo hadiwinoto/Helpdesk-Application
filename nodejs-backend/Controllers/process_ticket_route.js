@@ -202,8 +202,7 @@ exports.handleTicketClose = (req, res) => {
 
           const sendInfo = {
               ticket_id : id,
-              uid : req.body.uid || null,
-              file_id : req.body.file_id,
+              user_handler : req.body.user_handler || null,
               update_info : req.body.update_info,
               description_info : req.body.description_info
           }

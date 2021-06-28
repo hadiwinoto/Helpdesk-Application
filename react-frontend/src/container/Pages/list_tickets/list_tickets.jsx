@@ -34,22 +34,25 @@ class ListTickets extends React.Component {
     nodata: false,
     currentPage: 0,
     totalPages:0,
+    session : JSON.parse(localStorage.getItem('user'))
   }
 
   componentDidMount(){
     this.props.dispatch({type:'navbarShow'})
     window.scrollTo(0, 0) 
-    this.getAllTicket()
-    
+    this.getAllTicket();
   }
 
   getAllTicket(){
+    
+    let states = this.state;
 
     var params = {
-      ticket_status: this.state.status == 'All' ? '' : this.state.status,
-      user_handler:this.state.handleYou, 
-      ticket_id : this.state.searchData,
-      page:this.state.currentPage
+      ticket_status: states.status == 'All' ? '' : states.status,
+      user_handler:states.handleYou, 
+      ticket_id : states.searchData,
+      page:states.currentPage,
+      complainer_user: states.session.roles.includes("ROLE_ADMIN") ? '' :  states.session.username
     } 
 
     API.master.getTickets(params,authHeader()).then(res=>{
@@ -147,7 +150,7 @@ class ListTickets extends React.Component {
     let temp = '*'
     let listPage = [];
     let state = this.state;
-    let session = JSON.parse(localStorage.getItem('user'));
+    let session = this.state.session;
     for(var i = 1;i <= state.totalPages; i++){ 
      if(i - 1 == state.currentPage){
        listPage.push(<MDBPageItem active><MDBPageNav>{i}</MDBPageNav></MDBPageItem>)

@@ -31,6 +31,7 @@ exports.create = (req, res) => {
         file_id : req.body.file_id,
         target_troubleshoot : req.body.target_troubleshoot,
         ticket_status : "Open",
+        complainer : req.body.complainer,
         resolved_time : req.body.resolved_time,
         close_time : req.body.close_time,
         priority: req.body.priority,
@@ -56,16 +57,18 @@ exports.create = (req, res) => {
 
 exports.getList = (req,res) => {
 
-  const { page, size, ticket_id,ticket_status,user_handler} = req.query;
+  const { page, size, ticket_id,ticket_status,user_handler,complainer_user} = req.query;
 
   var ticketid = ticket_id ? `${ticket_id}` : null;
   var userHandler = user_handler ? `${user_handler}` : null;
   var ticketStatus = ticket_status ? `${ticket_status}` : null;
+  var complainer = complainer_user ? `${complainer_user}` : null;
 
   var condition = {}
   ticketid ? condition['ticket_id'] = {[op.like] : `%${ticketid}%`} : '';
   ticketStatus ? condition['ticket_status'] = ticketStatus : '';
   userHandler ? condition['user_handler'] = userHandler : '';
+  complainer ? condition['complainer'] = complainer : '';
   condition == null? condition : null
 
   const getPagination = (page, size) => {
@@ -77,16 +80,18 @@ exports.getList = (req,res) => {
 
   const getPagingData = (data, page, limit) => {
     const { count: totalItems, rows:  tickets} = data;
-    const currentPage = page ? +page : 0;
+    const currentPage = page ? + page : 0;
     const totalPages = Math.ceil(totalItems / limit);
     return { totalItems, tickets, totalPages, currentPage };
   };  
 
   const { limit, offset } = getPagination(page, size);
-  
-  Ticket.findAndCountAll({ where : condition, limit, offset,
+  const excludes = ['file_id','address','description_complaint']
+  Ticket.findAndCountAll({ 
+  where : condition, limit, offset,
   order: [['trouble_time', 'DESC']],
-    // include: ["update_info_model"]
+  attributes:
+      {exclude:excludes}
   })
     .then(data =>{
       const response = getPagingData(data, page, limit);

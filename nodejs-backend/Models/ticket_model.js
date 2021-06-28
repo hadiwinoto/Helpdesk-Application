@@ -38,6 +38,9 @@ module.exports = (Sequelize,connectMysql) => {
       },
       close_time : {
         type: Sequelize.STRING
+      },
+      complainer : {
+        type: Sequelize.STRING
       }
       ,
       file_id : {

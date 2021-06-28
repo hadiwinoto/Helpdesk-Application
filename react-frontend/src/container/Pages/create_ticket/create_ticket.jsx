@@ -73,6 +73,7 @@ state = {
         form : {    
             question_0 :{
                 ticket_id :"",
+                complainer: JSON.parse(localStorage.getItem('user')).username,
                 category_complant : "",
                 priority : "",
             },
@@ -337,7 +338,6 @@ handleValue(prop,step){
   render() {
     let active = this.state;
     let steps = getSteps();
-    console.log(active.form.question_0)
     return (
         <Fragment>
             {

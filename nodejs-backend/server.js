@@ -66,11 +66,13 @@ app.get('/api/home',[authJwt.verifyToken],function (req, res) {
 
 // Import Router
 require("./Routers/auth_route.js")(app); 
+require("./Routers/chat_route.js")(app); 
 require("./Routers/users_route.js")(app);
 require("./Routers/ticket_route.js")(app);
 require("./Routers/dashboard.route.js")(app); 
 require("./Routers/update_info_route.js")(app); 
 require("./Routers/process_ticket_route.js")(app); 
+
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)

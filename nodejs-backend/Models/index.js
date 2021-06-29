@@ -28,6 +28,7 @@ db.roles_model = require("./roles_model.js")(Sequelize,connectMysql);
 // Chat 
 db.room_model = require("./room.js")(Sequelize,connectMysql);
 db.room_chat_model = require("./roomchat.js")(Sequelize,connectMysql);
+db.file_chat = require("./filechat.js")(Sequelize,connectMysql);
 
 // Relation Ticket Model To Update Info
 db.ticket_model.hasMany(db.update_info_model, { as: "update_info_model",  foreignKey: "ticket_id"});

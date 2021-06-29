@@ -1,7 +1,7 @@
 module.exports = (Sequelize, connectMysql) => {
     const Room = connectMysql.define("room", {
       roomid: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         primaryKey: true
       },
       complainer_id: {

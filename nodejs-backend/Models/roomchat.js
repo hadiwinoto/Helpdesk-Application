@@ -1,8 +1,12 @@
 module.exports = (Sequelize, connectMysql) => {
     const RoomChat = connectMysql.define("roomchat", {
-      roomid: {
-        type: Sequelize.STRING,
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
+      },
+      roomid: {
+        type: Sequelize.STRING
       },
       complainer_id: {
         type: Sequelize.STRING

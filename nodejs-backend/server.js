@@ -12,12 +12,12 @@ const { authJwt } = require('./Middleware');
 const bcrypt = require('bcrypt');
 const db = require("./Models");
 
-// db.connectMysql.sync();
+db.connectMysql.sync();
 
-db.connectMysql.sync({ force: true }).then(() => {
-  console.log("Drop and re-sync db.");
-  initial();
-});
+// db.connectMysql.sync({ force: true }).then(() => {
+//   console.log("Drop and re-sync db.");
+//   initial();
+// });
 
   // Initial Roles
 function initial() {

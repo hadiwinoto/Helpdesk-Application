@@ -39,7 +39,7 @@ db.users_model.hasMany(db.ticket_model, { as: "ticket_model",  foreignKey: "user
 db.ticket_model.belongsTo(db.users_model, { foreignKey: 'user_handler', });
 
 // Relation Room Model To Roomchat
-db.room_model.hasMany(db.room_chat_model, { as: "room_model",  foreignKey: "roomid"});
+db.room_model.hasMany(db.room_chat_model, { as: "room_model_chat",  foreignKey: "roomid"});
 db.room_chat_model.belongsTo(db.room_model, { foreignKey: 'roomid', });
 
 

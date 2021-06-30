@@ -25,6 +25,7 @@ exports.ListChat = (req,res) => {
   
 }
 
+
 exports.CreateRoom = (req, res) => {
 
   // Validate request
@@ -114,8 +115,8 @@ exports.SendChat = (req, res) => {
 
           const send = {
             roomid : req.body.roomid,
-            complainer_id : req.body.complainer_id,
-            helpdesk_id : req.body.helpdesk_id,
+            complainer_id : data.complainer_id,
+            helpdesk_id : data.helpdesk_id,
             message: req.body.message,
             type: req.body.type,
             read: req.body.read,
@@ -144,4 +145,43 @@ exports.SendChat = (req, res) => {
     })
 
 };
+
+exports.HandleChat = (req,res) => {
+
+  const roomid = req.body.roomid;
+  const helpdesk_id = req.body.helpdesk_id;
+
+    // Validate Request
+    if (!req.body) {
+      res.status(400).send({
+        status: false,
+        message: "Content can not be empty!"
+      });
+    }
+
+    RoomModel.update({helpdesk_id:helpdesk_id},{
+      where : {roomid : roomid}
+    })
+  .then(num =>{
+    if(num == 1){
+      res.send({
+        status : true,
+        message: "Handle Chat was updated successfully."
+      });
+    }else{
+      res.send({
+        status : false,
+        message: `Cannot Handle room with id=${roomid}. Maybe Room was not found or req.body is empty!`
+      });
+    }
+  })
+  .catch(err =>{
+    res.status(500).send({
+      status : false,
+      message: "Error updating Update Info with id=" + roomid
+    });
+  })
+
+}
+
 

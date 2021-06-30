@@ -6,6 +6,8 @@ module.exports = app => {
   
     router.post("/", chat_controller.CreateRoom);
     
+    router.put("/", chat_controller.HandleChat);
+
     router.post("/send", chat_controller.SendChat);
 
     router.get("/send", chat_controller.ChatDetails);

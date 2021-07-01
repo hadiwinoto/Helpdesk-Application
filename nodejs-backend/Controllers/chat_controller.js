@@ -1,8 +1,11 @@
 const { room_chat_model } = require("../Models");
 const db = require("../Models");
-const RoomModel = db.room_model;
+
 const RoomChatModel = db.room_chat_model;
-const op = db.Sequelize.Op;
+const RoomModel = db.room_model;
+
+const dateFormat = require("dateformat");
+const now = new Date();
 
 exports.ListChat = (req,res) => {
 
@@ -90,6 +93,115 @@ exports.ChatDetails = (req,res) => {
   
 }
 
+exports.HandleChat = (req,res) => {
+
+  const roomid = req.body.roomid;
+  const helpdesk_id = req.body.helpdesk_id;
+
+    // Validate Request
+    if (!req.body) {
+      res.status(400).send({
+        status: false,
+        message: "Content can not be empty!"
+      });
+    }
+
+  RoomModel.update({helpdesk_id:helpdesk_id},{
+    where : {roomid : roomid}
+  })
+  .then(num =>{
+    if(num == 1){
+      res.send({
+        status : true,
+        message: "Handle Chat was updated successfully."
+      });
+    }else{
+      res.send({
+        status : false,
+        message: `Cannot Handle room with id=${roomid}. Maybe Room was not found or req.body is empty!`
+      });
+    }
+  })
+  .catch(err =>{
+    res.status(500).send({
+      status : false,
+      message: "Error Handle with id=" + roomid
+    });
+  })
+}
+
+exports.HandOverHandler = (req, res) => {
+
+  const roomid = req.body.roomid;
+  const helpdesk_id = req.body.helpdesk_id;
+
+    // Validate Request
+    if (!req.body) {
+      res.status(400).send({
+        status: false,
+        message: "Content can not be empty!"
+      });
+    }
+
+  RoomModel.update({helpdesk_id:helpdesk_id},{
+    where : {roomid : roomid}
+  })
+  .then(num =>{
+    if(num == 1){
+      res.send({
+        status : true,
+        message: "Handover Chat was updated successfully."
+      });
+    }else{
+      res.send({
+        status : false,
+        message: `Cannot Handover room with id=${roomid}. Maybe Room was not found or req.body is empty!`
+      });
+    }
+  })
+  .catch(err =>{
+    res.status(500).send({
+      status : false,
+      message: "Error Handover with id=" + roomid
+    });
+  })
+};
+
+exports.CloseChat = (req, res) => {
+
+  const roomid = req.body.roomid;
+
+    // Validate Request
+    if (!req.body) {
+      res.status(400).send({
+        status: false,
+        message: "Content can not be empty!"
+      });
+    }
+
+  RoomModel.update({status:'Close', closetime: dateFormat(now,"isoUtcDateTime")},{
+    where : {roomid : roomid}
+  })
+  .then(num =>{
+    if(num == 1){
+      res.send({
+        status : true,
+        message: "Close Chat was updated successfully."
+      });
+    }else{
+      res.send({
+        status : false,
+        message: `Cannot Close room with id=${roomid}. Maybe Room was not found or req.body is empty!`
+      });
+    }
+  })
+  .catch(err =>{
+    res.status(500).send({
+      status : false,
+      message: "Error Close with id=" + roomid
+    });
+  })
+};
 
 exports.SendChat = (req, res) => {
 
@@ -112,34 +224,43 @@ exports.SendChat = (req, res) => {
             });
           }
 
-          const send = {
-            roomid : req.body.roomid,
-            complainer_id : req.body.complainer_id,
-            helpdesk_id : req.body.helpdesk_id,
-            message: req.body.message,
-            type: req.body.type,
-            read: req.body.read,
-          };
-      
-          RoomChatModel.create(send)
-          .then(data => {
-              res.send({
-                status : true,
-                data : data
-              });
-          })
-          .catch(err => {
-              res.status(500).send({
-                status: false,
-                message : err.message ||  "Some error occurred while creating the Rooms."
-              });
-          });
+          if( data.helpdesk_id || req.body.sender.toLowerCase() == 'user' ){
+            
+            const send = {
+              roomid : req.body.roomid,
+              sender : req.body.sender,
+              handler: data.helpdesk_id,
+              message: req.body.message,
+              type: req.body.type,
+              read: req.body.read,
+            };
         
+            RoomChatModel.create(send)
+            .then(data => {
+                res.send({
+                  status : true,
+                  data : data
+                });
+            })
+            .catch(err => {
+                res.status(500).send({
+                  status: false,
+                  message : err.message ||  "Some error occurred while creating the Rooms."
+                });
+            });
+        
+          }else{
+            return res.status(404).send({
+              status : 1,
+              data : "Handler not found, please Handle first"
+            });
+          }
+
         })
         .catch(err=>{ 
             res.status(500).send({
               status : false,
-              message : err.message || "Some error occurred while retrieving List Chats."
+              message : err.message || "Some error occurred while detail."
         })
     })
 

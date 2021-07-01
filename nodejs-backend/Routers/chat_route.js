@@ -5,13 +5,18 @@ module.exports = app => {
     var router = require("express").Router();
   
     router.post("/", chat_controller.CreateRoom);
-    
-    router.post("/send", chat_controller.SendChat);
-
-    router.get("/send", chat_controller.ChatDetails);
 
     router.get("/", chat_controller.ListChat);
-  
+    
+    router.get("/send", chat_controller.ChatDetails);
+    
+    router.post("/send", chat_controller.SendChat);
+    
+    router.put("/handle", chat_controller.HandleChat);
+
+    router.put("/handover", chat_controller.HandOverHandler);
+
+    router.put("/close", chat_controller.CloseChat);
     
     app.use('/api/chat', router);
   };  

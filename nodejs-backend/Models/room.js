@@ -13,6 +13,9 @@ module.exports = (Sequelize, connectMysql) => {
       status: {
         type: Sequelize.STRING
       },
+      active: {
+        type: Sequelize.STRING
+      },
       closetime: {
         type: Sequelize.STRING
       }

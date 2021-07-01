@@ -8,7 +8,10 @@ module.exports = (Sequelize, connectMysql) => {
       roomid: {
         type: Sequelize.STRING
       },
-      complainer_id: {
+      sender: {
+        type: Sequelize.STRING
+      },
+      handler: {
         type: Sequelize.STRING
       },
       type: {
@@ -17,13 +20,7 @@ module.exports = (Sequelize, connectMysql) => {
       message: {
         type: Sequelize.TEXT
       },
-      helpdesk_id: {
-        type: Sequelize.STRING
-      },
       read: {
-        type: Sequelize.STRING
-      },
-      closetime: {
         type: Sequelize.STRING
       }
     });

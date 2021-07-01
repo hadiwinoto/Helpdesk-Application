@@ -17,6 +17,8 @@ module.exports = app => {
     router.put("/handover", chat_controller.HandOverHandler);
 
     router.put("/close", chat_controller.CloseChat);
+
+    router.put("/active", chat_controller.Active);
     
     app.use('/api/chat', router);
   };  

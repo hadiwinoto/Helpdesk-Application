@@ -1,16 +1,15 @@
-const bodyParser = require('body-parser');
-const jwt = require('jsonwebtoken');
-const express = require('express')
-const cors = require('cors');
-const app = express();
+
+const app = require('express')();
+const server = require("http").createServer(app);
 const port = 4000;
 
-const nodemailer = require('nodemailer');
 
 // Auth
 const { authJwt } = require('./Middleware');
-const bcrypt = require('bcrypt');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 const db = require("./Models");
+
 
 db.connectMysql.sync();
 
@@ -19,7 +18,7 @@ db.connectMysql.sync();
 //   initial();
 // });
 
-  // Initial Roles
+// Initial Roles
 function initial() {
     db.roles_model.create({
       id: 1,
@@ -64,6 +63,8 @@ app.get('/api/home',[authJwt.verifyToken],function (req, res) {
   });
 })
 
+require("./Socket/socket")(server);
+
 // Import Router
 require("./Routers/auth_route.js")(app); 
 require("./Routers/chat_route.js")(app); 
@@ -71,12 +72,14 @@ require("./Routers/users_route.js")(app);
 require("./Routers/ticket_route.js")(app);
 require("./Routers/dashboard.route.js")(app); 
 require("./Routers/update_info_route.js")(app); 
-require("./Routers/process_ticket_route.js")(app); 
+require("./Routers/process_ticket_route.js")(app);
 
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
+
+
 
 
 

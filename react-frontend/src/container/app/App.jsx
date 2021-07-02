@@ -19,6 +19,7 @@ import Dashboard from '../Pages/dashboard/dashboard';
 import Profile from '../Pages/profile/profile';
 import Login from '../Pages/Auth/login/login'
 import Home from '../Pages/home/home';
+import ChatDashboard from '../Pages/chat_dashboard/chat_dashboard';
 
 class App extends React.Component {
 
@@ -97,6 +98,7 @@ class App extends React.Component {
         <Route path="/detail-ticket/:id" component={detail_ticket}/>
         <Route path="/dashboard" component={Dashboard}/>
         <Route path="/profile" component={Profile}/>
+        <Route path="/chat-dashboard" component={ChatDashboard}/>
         </Fragment>
         
       </Router> 

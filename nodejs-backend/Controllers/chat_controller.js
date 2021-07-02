@@ -130,6 +130,7 @@ exports.HandleChat = (req,res) => {
   })
 }
 
+
 exports.Active = (req, res) => {
 
   const roomid = req.body.roomid;
@@ -183,6 +184,7 @@ exports.Active = (req, res) => {
     });
   })
 };
+
 
 exports.HandOverHandler = (req, res) => {
 
@@ -319,4 +321,70 @@ exports.SendChat = (req, res) => {
     })
 
 };
+
+
+exports.SendChat = (req, res) => {
+
+    // Validate request
+    if(!req.body) {
+        res.status(400).send({
+          status: false,
+          message: "Content can not be empty!"
+        });
+        return;
+    }
+
+    RoomModel.findByPk(req.body.roomid)
+        .then(data =>{
+          
+          if(!data){
+            return res.status(404).send({
+              status : 1,
+              data : "Room id Not Found."
+            });
+          }
+
+          if( data.helpdesk_id || req.body.sender.toLowerCase() == 'user' ){
+            
+            const send = {
+              roomid : req.body.roomid,
+              sender : req.body.sender,
+              handler: data.helpdesk_id,
+              message: req.body.message,
+              type: req.body.type,
+              read: 1,
+            };
+        
+            RoomChatModel.create(send)
+            .then(data => {
+                res.send({
+                  status : true,
+                  data : data
+                });
+            })
+            .catch(err => {
+                res.status(500).send({
+                  status: false,
+                  message : err.message ||  "Some error occurred while creating the Rooms."
+                });
+            });
+        
+          }else{
+            return res.status(404).send({
+              status : 1,
+              data : "Handler not found, please Handle first"
+            });
+          }
+
+        })
+        .catch(err=>{ 
+            res.status(500).send({
+              status : false,
+              message : err.message || "Some error occurred while detail."
+        })
+    })
+
+};
+
+
 

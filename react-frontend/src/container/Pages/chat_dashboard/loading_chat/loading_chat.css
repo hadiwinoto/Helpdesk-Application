@@ -1,0 +1,6 @@
+.loadingFull{
+    position: fixed;
+    left: 62%;
+    top: 40%;
+    z-index: 100;
+}

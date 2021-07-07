@@ -25,13 +25,13 @@ function GETLocalStorage(name) {
 const ChatDashboard = () => {
   
   const [Session,setSession] = useState(JSON.parse(localStorage.getItem('user')))
-  // const [ShowChat, setShowChat] = useState({data:{rows:[]}});
   const [ListChat, setListChat] = useState({data:{rows:[]}});
   const [activeTabs, setActiveTabs] = useState("1");
   const [Content, setContent] = useState(null);
   const [Loader, setLoader] = useState(false);
   const [Active,setActive] = useState(null);
   const inputRef = useRef(null);
+
   // Check storage
   if(!GETLocalStorage('ListChat')){
     SETLocalStorage('ListChat',{data:{rows:[]}});
@@ -45,8 +45,8 @@ const ChatDashboard = () => {
   
   function handleSubmit(e) {
     e.preventDefault();
-    
-    let getChatLast = GETLocalStorage(Active).data.rows.pop().id + 1;
+
+    let getChatLast = null;
     let dateNow = new Date();
     let BroadCast = new Object();
     BroadCast["createdAt"] = dateNow;
@@ -78,8 +78,9 @@ const ChatDashboard = () => {
   }
 
   async function getListChatDetails (roomid) {
-    await API.chat.GetChatDetail({ roomid:roomid}).then(res=>{  
+    await API.chat.GetChatDetail({ roomid:roomid}).then(res=>{ 
       SETLocalStorage(roomid,res);
+      setListChat(res)
     }).catch((error) => {
        alert(error)
     })
@@ -99,6 +100,14 @@ const ChatDashboard = () => {
       myDiv.scrollTop = myDiv.scrollHeight;
     })
 
+    // SendSuccess
+    socket.on("SendSuccess",(res)=>{
+      if(res.status)
+      {
+        getListChatDetails(res.data.roomid)
+      }
+    });
+
     inputRef.current.focus();
     
     if(GETLocalStorage('ListChat').data.rows.length == 0){
@@ -109,7 +118,7 @@ const ChatDashboard = () => {
     return () =>{
     }
   }, []);
-
+  console.log("+",ListChat)
   return (
     <Fragment>
         <div className="container">
@@ -232,7 +241,7 @@ const ChatDashboard = () => {
                             <MDBCol md="12" sm="12" lg="12">
                             <MDBRow className="d-flex justify-content-end">
                               <MDBCol sm="10" md="10" xl="10">
-                                  <ChatPanelUser chat={chat} />
+                                  <ChatPanelUser chat={chat}  />
                               </MDBCol> 
                               <MDBCol sm="1.5" md="1.5" xl="1.5">
                                   <img src={hd} className="img-fluid helpdeskphoto mr-2"  alt="" />
@@ -244,7 +253,7 @@ const ChatDashboard = () => {
                         })
                       }
                     </MDBCol>
-                    <MDBCol className="action" style={activeTabs != 1 ? {opacity:0.6, pointerEvents:"none"} : {}} md="12" xl="12" sm="12">
+                    <MDBCol className="action" style={activeTabs != 1 || Active == null ? {opacity:0.6, pointerEvents:"none"} : {}} md="12" xl="12" sm="12">
                     <form className="action" onSubmit={(e)=>handleSubmit(e)}>
                     <MDBRow className="d-flex justify-content-center">
                         <MDBCol className="d-flex align-items-center" size="2">

@@ -17,9 +17,9 @@ module.exports = server => {
           
           socket.emit("SendBackChat",res)
 
-          // POST("chat/send",res).then(resPost=>{
-          //   console.log(resPost)
-          // })
+          POST("chat/send",res).then(res=>{
+            socket.emit("SendSuccess",JSON.parse(res.body))
+          })
 
         })
         
@@ -49,7 +49,7 @@ function GET(path,params){
 
 function POST(path,params){
   const promise = new Promise((resolve,reject)=>{
-    request.put(`${URL}/api/${path}`,{form:params}, function (error, response, body) {
+    request.post(`${URL}/api/${path}`,{form:params}, function (error, response, body) {
       if(!error){ 
         resolve(response)
       }else{
@@ -57,6 +57,7 @@ function POST(path,params){
       }
     });
   })
+  return promise;
 }
 
 function PUT(path,params){

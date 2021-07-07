@@ -27,6 +27,10 @@
     background: #273c75;    
 }
 
+.fa-check-double{
+    color: aqua;
+}
+
 #msg{
     height: 5vh;
 }

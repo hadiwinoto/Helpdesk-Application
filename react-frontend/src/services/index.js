@@ -23,6 +23,11 @@ const handleTicket = (data,header) => Post(`api/handle-ticket/handle?ticket_id=$
 const updateTicket = (data,header) => Post(`api/handle-ticket/update?ticket_id=${data.ticket_id}`,false,true,header,data)
 const resolvedTicket = (data,header) => Post(`api/handle-ticket/resolved?ticket_id=${data.ticket_id}`,false,true,header,data)
 const closeTicket = (data,header) => Post(`api/handle-ticket/close?ticket_id=${data.ticket_id}`,false,true,header,data)
+
+// Live Chat
+const GetListChat = (data,header) => Get(`api/chat`,false,true,header,data)
+const GetChatDetail = (data,header) => Get(`api/chat/send`,false,true,header,data)
+
 // Export
 const API ={
     auth: {
@@ -44,6 +49,10 @@ const API ={
         updateTicket,
         resolvedTicket,
         closeTicket
+    },
+    chat:{
+        GetListChat,
+        GetChatDetail
     }
 }
 

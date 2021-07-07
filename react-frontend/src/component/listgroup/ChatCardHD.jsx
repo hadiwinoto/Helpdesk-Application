@@ -1,7 +1,10 @@
 import React from 'react';
-import { MDBCard, MDBCardBody, MDBCol, MDBCardText } from "mdbreact";
+import { MDBCard, MDBCardBody, MDBCol, MDBCardText,MDBIcon } from "mdbreact";
+import moment from 'moment'
 
 const ChatPanelHD = (props) => {
+let date = new Date(props.chat.createdAt);
+let send = props.send;
 return (
     <MDBCol md="12" sm='12' lg="12" >
       <MDBCard color="elegant-color" text="white" className="text-center">
@@ -9,8 +12,10 @@ return (
             <MDBCardText style={{color:'white'}}>
             {props.chat.message}
             </MDBCardText>
-            <MDBCardText style={{color:'white', fontWeight: "bold"}} className="text-right">
-             12:00
+            
+            <MDBCardText style={{color:'white', fontWeight: "bold"}} className="text-right d-flex justify-content-between">
+            <MDBIcon icon="check" />
+            {moment(date).format('LT')}
             </MDBCardText>
         </MDBCardBody>
       </MDBCard>

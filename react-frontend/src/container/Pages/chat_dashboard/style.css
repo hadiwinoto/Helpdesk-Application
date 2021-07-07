@@ -13,6 +13,7 @@
 }
 
 .messagebox{
+    height: 78vh;
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -22,13 +23,17 @@
 }
 
 .messagebox{
-    height: 75%;
-    background: #dcdde1;    
+    height: 81vh;
+    background: #273c75;    
+}
+
+#msg{
+    height: 5vh;
 }
 
 .action{
-    background: #718093;
-    height: 12.5%;
+    background: #2c2c54;
+    height: 9vh;
 }
 
 .helpdeskphoto{
@@ -39,13 +44,12 @@
 }
 
 .info{
-    background: #718093;
-    height: 12.5%;
+    background: #2c2c54;
+    height: 10vh;
 }
 
 .list-group-item{
     width: 99%;
     border-top-width:1px !important;
 }
-
 

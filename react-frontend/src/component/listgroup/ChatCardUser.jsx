@@ -6,7 +6,7 @@ let date = new Date(props.chat.createdAt);
 return (
     <MDBCol md="12" sm='12' lg="12" >
       <MDBCard color="primary-color-dark" text="white" className="text-center">
-        <MDBCardBody className="p-3 text-left"> 
+        <MDBCardBody className="p-2 text-left"> 
             <MDBCardText style={{color:'white'}}>
               {props.chat.message}           
              </MDBCardText>
@@ -20,3 +20,4 @@ return (
 };
 
 export default ChatPanelUser;
+

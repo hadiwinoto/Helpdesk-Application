@@ -1,4 +1,4 @@
 module.exports = {
-    URL: "http://6582db941018.ngrok.io",
+    URL: "http://localhost:4000",
     CLIENT : "http://localhost:8000"
 };  

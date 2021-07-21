@@ -93,6 +93,10 @@ toCreateTicket(){
     this.props.history.push('/create-ticket')
 }
 
+ChatDashboard(){
+    this.props.history.push('/chat-dashboard')
+}
+
 render() {  
     const ROLE_COMPLAINER = (
         <Fragment>
@@ -166,7 +170,18 @@ render() {
             <MDBRow>
             <MDBCol md="6" sm="12">
                     <div data-aos="fade-up">
-                        <CardExample title="Live Chat" desc="All chat Complaint from Customers" img={chat}></CardExample>
+                      
+                        <MDBCol className="w-100">
+                            <MDBCard className="mt-3">
+                                <MDBCardImage className="img-fluid mx-auto w-50 mt-4 mb-4" src={chat}
+                                waves />
+                                <MDBCardBody className="text-center">
+                                <MDBCardTitle>Chat Dashboard</MDBCardTitle>
+                                <MDBCardText>All chat Complaint from Customers</MDBCardText>
+                                <MDBBtn gradient="blue" onClick={()=>this.ChatDashboard()} className="btn-lg btn-block">Open</MDBBtn>
+                                </MDBCardBody>
+                            </MDBCard>
+                            </MDBCol>
                     </div>
             </MDBCol>
             </MDBRow>
@@ -200,7 +215,17 @@ render() {
                 <MDBRow>
                     <MDBCol md="6" sm="12">
                         <div data-aos="fade-up">
-                            <CardExample title="Live Chat" desc="All chat Complaint from Customers" img={chat}></CardExample>
+                            <MDBCol className="w-100">
+                            <MDBCard className="mt-3">
+                                <MDBCardImage className="img-fluid mx-auto w-50 mt-4 mb-4" src={chat}
+                                waves />
+                                <MDBCardBody className="text-center">
+                                <MDBCardTitle>Chat Dashboard</MDBCardTitle>
+                                <MDBCardText>All chat Complaint from Customers</MDBCardText>
+                                <MDBBtn gradient="blue" onClick={()=>this.ChatDashboard()} className="btn-lg btn-block">Open</MDBBtn>
+                                </MDBCardBody>
+                            </MDBCard>
+                            </MDBCol>
                         </div>
                     </MDBCol>
                     <MDBCol md="6" sm="12">
@@ -256,7 +281,7 @@ render() {
                     declare
                 }
             </MDBContainer>
-            <FooterPage/>
+            {/* <FooterPage/> */}
         </Fragment>
     );
   }

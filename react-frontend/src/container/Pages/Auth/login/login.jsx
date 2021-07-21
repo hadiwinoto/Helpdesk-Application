@@ -226,7 +226,7 @@
                 </MDBRow>
               </MDBContainer>
               
-              <Footer/>
+              {/* <Footer/> */}
               
           </Fragment>
       );

@@ -1,5 +1,6 @@
 import base64 from 'react-native-base64'
 
+import Put from "./Put";
 import Get from "./Get";
 import Post from "./Post";
 
@@ -25,9 +26,13 @@ const resolvedTicket = (data,header) => Post(`api/handle-ticket/resolved?ticket_
 const closeTicket = (data,header) => Post(`api/handle-ticket/close?ticket_id=${data.ticket_id}`,false,true,header,data)
 
 // Live Chat
-const GetListChat = (data,header) => Get(`api/chat`,false,true,header,data)
+const CloseSession = (data,header) => Put(`api/chat/close?roomid=${data.roomid}`,false,true,header,data)
+const HandOverHandler = (data,header) => Put(`api/chat/handover`,false,true,header,data)
 const GetChatDetail = (data,header) => Get(`api/chat/send`,false,true,header,data)
-
+const HandleChat = (data,header) => Put(`api/chat/handle`,false,true,header,data)
+const CountList = (data,header) => Get(`api/chat/count-list`,false,true,header,data)
+const OpenChat = (data,header) => Put(`api/chat/open`,false,true,header,data)
+const GetListChat = (data,header) => Get(`api/chat`,false,true,header,data)
 // Export
 const API ={
     auth: {
@@ -51,8 +56,13 @@ const API ={
         closeTicket
     },
     chat:{
+        HandOverHandler,
+        GetChatDetail,
+        CloseSession,
         GetListChat,
-        GetChatDetail
+        HandleChat,
+        CountList,
+        OpenChat,
     }
 }
 

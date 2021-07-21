@@ -41,7 +41,7 @@ class App extends React.Component {
       <Router>
         <Fragment>
               {this.props.state.navbarStatus && (
-              <MDBNavbar color="indigo" dark expand="md">
+              <MDBNavbar color="indigo"  dark expand="md">
               <MDBContainer>
               <MDBNavbarBrand>
                 <strong className="white-text">Menu</strong>

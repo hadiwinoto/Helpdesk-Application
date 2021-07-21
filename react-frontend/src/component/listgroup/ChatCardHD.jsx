@@ -8,14 +8,16 @@ let send = props.chat.id;
 return (
     <MDBCol md="12" sm='12' lg="12" >
       <MDBCard color="elegant-color" text="white" className="text-center">
-        <MDBCardBody className="p-3 text-left"> 
+        <MDBCardBody className="p-2 text-left"> 
             <MDBCardText style={{color:'white'}}>
             {props.chat.message}
             </MDBCardText>
             
-            <MDBCardText style={{color:'white', fontWeight: "bold"}} className="text-right d-flex justify-content-between">
+            <MDBCardText style={{color:'white', fontWeight: "bold"}} className="text-right d-flex justify-content-end">
+            <div className="mr-2">
+                {moment(date).format('LT')}
+            </div>
             <MDBIcon icon={send ? 'check-double' : 'check'} />
-            {moment(date).format('LT')}
             </MDBCardText>
         </MDBCardBody>
       </MDBCard>

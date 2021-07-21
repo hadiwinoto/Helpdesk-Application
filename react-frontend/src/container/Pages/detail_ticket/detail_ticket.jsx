@@ -209,7 +209,7 @@ class DetailTicket extends React.Component {
                 </MDBTabPane>
               </MDBTabContent>
             </MDBContainer>
-            <FooterPage/>
+            {/* <FooterPage/> */}
         </Fragment>
     );
   }

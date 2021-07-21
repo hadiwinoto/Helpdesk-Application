@@ -46,7 +46,7 @@ class Profile extends React.Component {
                 </MDBRow>
               </MDBCol>
             </MDBContainer>
-            <FooterPage/>
+            {/* <FooterPage/> */}
             
         </Fragment>
     );

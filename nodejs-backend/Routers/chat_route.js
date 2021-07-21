@@ -7,6 +7,8 @@ module.exports = app => {
     router.post("/", chat_controller.CreateRoom);
 
     router.get("/", chat_controller.ListChat);
+
+    router.get("/count-list", chat_controller.ListChatCount);
     
     router.get("/send", chat_controller.ChatDetails);
     
@@ -16,9 +18,9 @@ module.exports = app => {
 
     router.put("/handover", chat_controller.HandOverHandler);
 
-    router.put("/close", chat_controller.CloseChat);
+    router.put("/open", chat_controller.OpenChat);
 
-    router.put("/active", chat_controller.Active);
+    router.put("/close", chat_controller.CloseChat);
     
     app.use('/api/chat', router);
   };  

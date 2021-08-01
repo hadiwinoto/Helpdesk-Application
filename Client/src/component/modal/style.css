@@ -1,0 +1,40 @@
+.ComplaintMassageBox{
+    height: 70vh;
+    overflow: auto  ;
+    background: #4B515D;
+}
+
+.ActionComplaintChat{
+    width: 100%;
+}
+
+.FooterChat{
+    background: #232335;
+    border:0px;
+    border-radius:0px;
+}
+
+.online{
+    margin-left: 40px;
+}
+
+.conline{
+    width: 113px;
+    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+
+}
+
+.imgHead{
+    width:35px;
+    height: 35px;
+    margin-left: 5px;
+}
+
+.hdhead{
+    font-size: 15px;
+    font-weight: bold;
+    margin-left: 10px;
+}

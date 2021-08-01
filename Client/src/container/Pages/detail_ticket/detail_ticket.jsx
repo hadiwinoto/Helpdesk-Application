@@ -18,6 +18,7 @@ import ModalUpdatePage from '../../../component/modal/modal_update';
 import ModalClosePage from '../../../component/modal/modal_close';
 import PanelPage from '../../../component/panel_page/panel_page';
 import FooterPage from '../../../component/footer/footerPage';
+import ModalChat from '../../../component/modal/modal_chat';
 import API from '../../../services';
 import './detail_ticket.css';
 
@@ -100,8 +101,8 @@ class DetailTicket extends React.Component {
               </MDBBreadcrumb>
             </div>
             <MDBContainer className={this.state.activeItem == 2 && update_list.length <= 3 ? 'h-100' : '' }>
-              <MDBNav className="nav-tabs w-100">
-              <MDBNavItem>
+              <MDBNav className="nav-tabs w-100 mb-2" style={{borderBottom:"0px"}}>
+              <MDBNavItem >
                 <MDBNavLink link to="#" active={this.state.activeItem === "1"} onClick={this.toggle("1")} role="tab" >
                   Detail
                 </MDBNavLink>
@@ -116,7 +117,7 @@ class DetailTicket extends React.Component {
                 )
               }
             </MDBNav>
-              <MDBTabContent activeItem={this.state.activeItem} >
+              <MDBTabContent activeItem={this.state.activeItem}>
                 {/* Detail Ticket */}
                 <MDBTabPane tabId="1" role="tabpanel">
                   <MDBJumbotron>
@@ -189,7 +190,8 @@ class DetailTicket extends React.Component {
                               { data.ticket_status == 'Process' && ( <ModalUpdatePage data={data}/> ) }
                               { data.ticket_status == 'Process' && ( <ModalResolvedPage data={data}/> ) }
                               { data.ticket_status == 'Update' && ( <ModalUpdatePage data={data}/> ) }
-                              { data.ticket_status == 'Update' && ( <ModalResolvedPage data={data}/> ) }
+                              { data.ticket_status == 'Update' && ( <ModalUpdatePage data={data}/> ) }
+                              { data.ticket_status != 'Close' && ( <ModalChat/> ) }
                             </div>
                           </MDBCol>
                         )

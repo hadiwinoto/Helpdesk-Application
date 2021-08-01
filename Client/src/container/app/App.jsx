@@ -10,7 +10,6 @@ import './App.css'
 
 // Component
 // Pages
-import ComplainerChat from '../Pages/chat_dashboard/complainer_chat';
 import ChatDashboard from '../Pages/chat_dashboard/chat_dashboard';
 import create_ticket from '../Pages/create_ticket/create_ticket';
 import detail_ticket from '../Pages/detail_ticket/detail_ticket';
@@ -37,6 +36,7 @@ class App extends React.Component {
       localStorage.removeItem('user')  
   }
   render() {
+ 
     return (
       <Router>
         <Fragment>
@@ -101,7 +101,6 @@ class App extends React.Component {
         <Route path="/profile" component={Profile}/>
        
         <Route path="/chat-dashboard" component={ChatDashboard}/>
-        <Route path="/chat-complainer" component={ComplainerChat}/>
         </Fragment>
         
       </Router> 

@@ -38,6 +38,7 @@ function SortArrayDESC(array) {
 function ScrollToBottom() {
   // Scroll Bottom
   var myDiv = document.getElementById("messagebox");
+  console.log(myDiv)
   myDiv.scrollTop = myDiv.scrollHeight;
 }
 
@@ -384,7 +385,7 @@ const ChatDashboard = () => {
 
     // Component Did Update
     return () =>{
-      ScrollToBottom()  
+      // ScrollToBottom()  
     }
   }, [Active]);
   

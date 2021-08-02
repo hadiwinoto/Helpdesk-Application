@@ -1,6 +1,9 @@
-import React, { useState,Fragment,useEffect } from 'react';
+import React, { useState,Fragment,useEffect,useRef} from 'react';
 import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, 
     MDBModalHeader, MDBModalFooter, MDBCol,MDBIcon, MDBRow  } from 'mdbreact';
+import { useParams } from "react-router-dom";
+
+import API from '../../services';
 
 import './style.css';
 import hd from './img/hd.png';
@@ -8,234 +11,114 @@ import ChatHead from './img/chat.png';
 import ChatPanelUser from '../listgroup/ChatCardUser';
 import ChatPanelHD from '../listgroup/ChatCardHD';
 
-function ModalChat(props) {
-      const [modal, setModal] = useState(false);
-      
-      const closeModal = (modal) =>{
-            setModal(false)
-      }
-      const chat = [
-        {
-          "id": 1,
-          "roomid": "COP-20200101-00001",
-          "sender": "Helpdesk",
-          "handler": "m.fazrin.fahlevi",
-          "type": "Text",
-          "message": "hallo",
-          "read": "1",
-          "createdAt": "2021-08-01T11:33:49.000Z",
-          "updatedAt": "2021-08-01T11:33:49.000Z"
-        },
-        {
-          "id": 2,
-          "roomid": "COP-20200101-00001",
-          "sender": "Helpdesk",
-          "handler": "m.fazrin.fahlevi",
-          "type": "Text",
-          "message": "hallo",
-          "read": "1",
-          "createdAt": "2021-08-01T11:33:58.000Z",
-          "updatedAt": "2021-08-01T11:33:58.000Z"
-        },
-        {
-          "id": 3,
-          "roomid": "COP-20200101-00001",
-          "sender": "Vivi",
-          "handler": "m.fazrin.fahlevi",
-          "type": "Text",
-          "message": "Hallo",
-          "read": "1",
-          "createdAt": "2021-08-01T11:42:18.000Z",
-          "updatedAt": "2021-08-01T11:42:18.000Z"
-        },
-        {
-          "id": 4,
-          "roomid": "COP-20200101-00001",
-          "sender": "Vivi",
-          "handler": "m.fazrin.fahlevi",
-          "type": "Text",
-          "message": "hallo",
-          "read": "1",
-          "createdAt": "2021-08-01T11:42:20.000Z",
-          "updatedAt": "2021-08-01T11:42:20.000Z"
-        },
-        {
-          "id": 5,
-          "roomid": "COP-20200101-00001",
-          "sender": "Helpdesk",
-          "handler": "m.fazrin.fahlevi",
-          "type": "Text",
-          "message": "hallo",
-          "read": "1",
-          "createdAt": "2021-08-01T11:42:22.000Z",
-          "updatedAt": "2021-08-01T11:42:22.000Z"
-        },
-        {
-          "id": 6,
-          "roomid": "COP-20200101-00001",
-          "sender": "Vivi",
-          "handler": "m.fazrin.fahlevi",
-          "type": "Text",
-          "message": "asdasd",
-          "read": "1",
-          "createdAt": "2021-08-01T11:42:24.000Z",
-          "updatedAt": "2021-08-01T11:42:24.000Z"
-        },
-        {
-          "id": 7,
-          "roomid": "COP-20200101-00001",
-          "sender": "Helpdesk",
-          "handler": "m.fazrin.fahlevi",
-          "type": "Text",
-          "message": "asdasd",
-          "read": "1",
-          "createdAt": "2021-08-01T11:42:26.000Z",
-          "updatedAt": "2021-08-01T11:42:26.000Z"
-        },
-        {
-          "id": 8,
-          "roomid": "COP-20200101-00001",
-          "sender": "Vivi",
-          "handler": "m.fazrin.fahlevi",
-          "type": "Text",
-          "message": "asdasd",
-          "read": "1",
-          "createdAt": "2021-08-01T11:42:27.000Z",
-          "updatedAt": "2021-08-01T11:42:27.000Z"
-        },
-        {
-          "id": 9,
-          "roomid": "COP-20200101-00001",
-          "sender": "Helpdesk",
-          "handler": "m.fazrin.fahlevi",
-          "type": "Text",
-          "message": "asdasd",
-          "read": "1",
-          "createdAt": "2021-08-01T11:42:29.000Z",
-          "updatedAt": "2021-08-01T11:42:29.000Z"
-        },
-        {
-          "id": 10,
-          "roomid": "COP-20200101-00001",
-          "sender": "Vivi",
-          "handler": "m.fazrin.fahlevi",
-          "type": "Text",
-          "message": "asdasd",
-          "read": "1",
-          "createdAt": "2021-08-01T11:42:30.000Z",
-          "updatedAt": "2021-08-01T11:42:30.000Z"
-        },
-        {
-          "id": 11,
-          "roomid": "COP-20200101-00001",
-          "sender": "Helpdesk",
-          "handler": "m.fazrin.fahlevi",
-          "type": "Text",
-          "message": "asdasd",
-          "read": "1",
-          "createdAt": "2021-08-01T11:42:32.000Z",
-          "updatedAt": "2021-08-01T11:42:32.000Z"
-        },
-        {
-          "id": 12,
-          "roomid": "COP-20200101-00001",
-          "sender": "Vivi",
-          "handler": "m.fazrin.fahlevi",
-          "type": "Text",
-          "message": "asdasd",
-          "read": "1",
-          "createdAt": "2021-08-01T11:42:34.000Z",
-          "updatedAt": "2021-08-01T11:42:34.000Z"
-        },
-        {
-          "id": 13,
-          "roomid": "COP-20200101-00001",
-          "sender": "Helpdesk",
-          "handler": "m.fazrin.fahlevi",
-          "type": "Text",
-          "message": "tes",
-          "read": "1",
-          "createdAt": "2021-08-01T11:42:57.000Z",
-          "updatedAt": "2021-08-01T11:42:57.000Z"
-        },
-        {
-          "id": 14,
-          "roomid": "COP-20200101-00001",
-          "sender": "Vivi",
-          "handler": "m.fazrin.fahlevi",
-          "type": "Text",
-          "message": "asd",
-          "read": "1",
-          "createdAt": "2021-08-01T11:43:17.000Z",
-          "updatedAt": "2021-08-01T11:43:17.000Z"
-        },
-        {
-          "id": 15,
-          "roomid": "COP-20200101-00001",
-          "sender": "Helpdesk",
-          "handler": "m.fazrin.fahlevi",
-          "type": "Text",
-          "message": "asd",
-          "read": "1",
-          "createdAt": "2021-08-01T11:43:18.000Z",
-          "updatedAt": "2021-08-01T11:43:18.000Z"
-        },
-        {
-          "id": 16,
-          "roomid": "COP-20200101-00001",
-          "sender": "cz",
-          "handler": "m.fazrin.fahlevi",
-          "type": "Text",
-          "message": "asd",
-          "read": "1",
-          "createdAt": "2021-08-01T12:02:02.000Z",
-          "updatedAt": "2021-08-01T12:02:02.000Z"
-        },
-        {
-          "id": 17,
-          "roomid": "COP-20200101-00001",
-          "sender": "Vivi",
-          "handler": "m.fazrin.fahlevi",
-          "type": "Text",
-          "message": "asd",
-          "read": "1",
-          "createdAt": "2021-08-01T12:45:35.000Z",
-          "updatedAt": "2021-08-01T12:45:35.000Z"
-        },
-        {
-          "id": 18,
-          "roomid": "COP-20200101-00001",
-          "sender": "Helpdesk",
-          "handler": "m.fazrin.fahlevi",
-          "type": "Text",
-          "message": "asd",
-          "read": "1",
-          "createdAt": "2021-08-01T12:45:36.000Z",
-          "updatedAt": "2021-08-01T12:45:36.000Z"
-        },
-        {
-          "id": 19,
-          "roomid": "COP-20200101-00001",
-          "sender": "Vivi",
-          "handler": "m.fazrin.fahlevi",
-          "type": "Text",
-          "message": "hllo",
-          "read": "1",
-          "createdAt": "2021-08-01T12:45:44.000Z",
-          "updatedAt": "2021-08-01T12:45:44.000Z"
-        },
-        {
-          "id": 20,
-          "roomid": "COP-20200101-00001",
-          "sender": "Helpdesk",
-          "handler": "m.fazrin.fahlevi",
-          "type": "Text",
-          "message": "sdfsd",
-          "read": "1",
-          "createdAt": "2021-08-01T12:45:46.000Z",
-          "updatedAt": "2021-08-01T12:45:46.000Z"
-        }]
+import socketIOClient from "socket.io-client";
 
+const socket = socketIOClient("http://localhost:4000");
+
+
+function SETLocalStorage(name,params) {
+  localStorage.setItem(name, JSON.stringify(params));
+}
+
+function GETLocalStorage(name) {
+  return JSON.parse(localStorage.getItem(name))
+}
+
+function RemoveLocalStorage(name){
+  localStorage.removeItem(name);
+}
+
+function ScrollToBottom() {
+  var myDiv = document.getElementById("ComplaintMassageBox2");
+  myDiv.scrollTop = myDiv.scrollHeight;
+}
+
+function ModalChat(props) {
+      const [Session,setSession] = useState(JSON.parse(localStorage.getItem('user')))
+      const [modal, setModal] = useState(false);
+      const [Content,setContent] = useState(null);
+      const [Temp,setTemp] = useState(null)
+      const inputRef = useRef(null);
+      const { id } = useParams();
+
+      const closeModal = (modal) =>{
+        setModal(false)
+      }      
+
+      if(!GETLocalStorage(id)){
+        SETLocalStorage(id,{data:{rows:[]}})
+      }
+
+      async function getListChatDetails (id,send) {
+        await API.chat.GetChatDetail({ roomid:id}).then(res=>{ 
+          
+          SETLocalStorage(id,res);  
+          
+          setTemp(res)
+        }).catch((error) => {
+           alert(error)
+        })
+      }
+
+      function GetMsg(e){
+        setContent(e.target.value)
+      }
+
+      function handleSubmit(e) {
+
+        if(Content.trim().length ==  0){
+          return false
+        }
+        
+        e.preventDefault();
+        
+        let getChatLast = null;
+        let dateNow = new Date();
+        let BroadCast = new Object();
+        BroadCast["createdAt"] = dateNow;
+        BroadCast["updatedAt"] = dateNow;
+        BroadCast["sender"] = Session.username;
+        BroadCast["message"] = Content;
+        BroadCast["id"] = getChatLast;
+        BroadCast["roomid"] = id;
+        BroadCast["type"] = "Text";
+        BroadCast["read"] = 1;    
+
+        socket.emit("SendChat",BroadCast);
+      }
+
+      useEffect( ()  => {
+  
+        if(GETLocalStorage(id)){
+          getListChatDetails(id,null)
+        }
+
+        socket.on("SendBackChat",(res)=>{
+
+          let chatWillUpdate = GETLocalStorage(res.roomid);
+          chatWillUpdate.data.rows.push(res)
+          
+          SETLocalStorage(res.roomid, chatWillUpdate);
+          setContent("")
+          
+            
+          ScrollToBottom()
+        })
+
+        // SendSuccess
+        socket.on("SendSuccess",(res)=>{
+          console.log(res)
+          if(res.status)
+          {
+            getListChatDetails(res.data.roomid,'send')
+          }
+        });
+
+    
+        // Component Did Update
+        return () =>{
+        }
+      }, []);
       return (
         <Fragment>
           <MDBBtn onClick={() => setModal(true)} color="primary">
@@ -256,13 +139,29 @@ function ModalChat(props) {
                     </MDBModalHeader>
                         <MDBModalBody className="p-0">
                               <MDBContainer className="text-white">
-                                    <MDBRow>
-                                        <MDBCol className="ComplaintMassageBox p-3">
+                                    <MDBRow id="ComplaintMassageBox">
+                                        <MDBCol className="ComplaintMassageBox p-3" id="ComplaintMassageBox2">
                                             {
-                                                chat.map(chat=>{
+                                                GETLocalStorage(id).data.rows.map(chat=>{
                                                     if(chat.sender == "Helpdesk"){
                                                         return(
-                                                            <MDBRow className="h-auto d-inline-block mt-3 w-100">
+                                                          <MDBRow className="h-auto d-inline-block mt-3 w-100">
+                                                        {/* Helpdesk */}
+                                                        <MDBCol md="12" sm="12" lg="12">
+                                                        <MDBRow className="d-flex justify-content-end">
+                                                          <MDBCol sm="10" md="10" xl="10">
+                                                              <ChatPanelUser chat={chat}  />
+                                                          </MDBCol> 
+                                                          <MDBCol sm="1.5" md="1.5" xl="1.5">
+                                                              <img src={hd} className="img-fluid helpdeskphoto mt-3"  alt="" />
+                                                          </MDBCol>
+                                                        </MDBRow>
+                                                      </MDBCol>
+                                                      </MDBRow>
+                                                        )
+                                                    }else{
+                                                        return(
+                                                             <MDBRow className="h-auto d-inline-block mt-3 w-100">
                                                                 {/* Complainer */}
                                                                 <MDBCol md="12" sm="12" lg="12">
                                                                 <MDBRow>
@@ -276,20 +175,6 @@ function ModalChat(props) {
                                                                 </MDBCol>
                                                             </MDBRow>
                                                         )
-                                                    }else{
-                                                        return(<MDBRow className="h-auto d-inline-block mt-3 w-100">
-                                                        {/* Helpdesk */}
-                                                        <MDBCol md="12" sm="12" lg="12">
-                                                        <MDBRow className="d-flex justify-content-end">
-                                                          <MDBCol sm="10" md="10" xl="10">
-                                                              <ChatPanelUser chat={chat}  />
-                                                          </MDBCol> 
-                                                          <MDBCol sm="1.5" md="1.5" xl="1.5">
-                                                              <img src={hd} className="img-fluid helpdeskphoto mt-3"  alt="" />
-                                                          </MDBCol>
-                                                        </MDBRow>
-                                                      </MDBCol>
-                                                      </MDBRow>)
                                                     }
                                                 })
                                             }
@@ -298,7 +183,7 @@ function ModalChat(props) {
                               </MDBContainer>
                         </MDBModalBody>
                         <MDBModalFooter className="FooterChat">
-                            <form className="ActionComplaintChat">
+                            <form className="ActionComplaintChat" onSubmit={(e)=>handleSubmit(e)}>
                                 <MDBRow className="d-flex justify-content-center">
                                     <MDBCol className="d-flex align-items-center" size="2">
                                     <MDBBtn  size="sm" className="d-flex justify-content-center">
@@ -306,7 +191,7 @@ function ModalChat(props) {
                                     </MDBBtn>
                                     </MDBCol>
                                     <MDBCol className="d-flex align-items-center" size="8">
-                                        <input type="text" autocomplete="off" className="form-control" id="msg"/>
+                                        <input type="text" autocomplete="off" required  ref={inputRef} value={Content} onChange={(e)=>GetMsg(e)} value={Content} className="form-control" id="msg"/>
                                     </MDBCol>
                                     <MDBCol className="d-flex align-items-center" size="2">
                                     <MDBBtn size="sm"className="d-flex justify-content-center">

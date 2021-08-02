@@ -38,7 +38,6 @@ function SortArrayDESC(array) {
 function ScrollToBottom() {
   // Scroll Bottom
   var myDiv = document.getElementById("messagebox");
-  console.log(myDiv)
   myDiv.scrollTop = myDiv.scrollHeight;
 }
 
@@ -73,7 +72,7 @@ const ChatDashboard = () => {
     })
   }
 
-  console.log(GETLocalStorage("ListChat").data.rows.length +"=----"+CountListTemp)
+  // console.log(GETLocalStorage("ListChat").data.rows.length +"=----"+CountListTemp)
   //Compare LocalStorage with API List
   if( GETLocalStorage("ListChat").data.rows.length != CountListTemp){
       getListChat()
@@ -210,7 +209,7 @@ const ChatDashboard = () => {
     if(Content.trim().length ==  0){
       return false
     }
-    console.log(Content)
+
     e.preventDefault();
     
     let getChatLast = null;
@@ -361,8 +360,10 @@ const ChatDashboard = () => {
     if(Active == null){
       CountList()
     }
-    
+
     socket.on("SendBackChat",(res)=>{
+
+      console.log("!!!!!!!",res)
       let chatWillUpdate = GETLocalStorage(res.roomid);
       chatWillUpdate.data.rows.push(res)
       

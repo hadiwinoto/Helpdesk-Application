@@ -15,6 +15,8 @@ import socketIOClient from "socket.io-client";
 import LoadingChat from './loading_chat/loading_chat';
 import Swal from 'sweetalert2';
 
+// BEEP
+import ArrivedChatBeep from '../../../beep/newChat.mp3';
 
 const socket = socketIOClient("http://localhost:4000");
 
@@ -35,10 +37,22 @@ function SortArrayDESC(array) {
   array.sort(function(a,b){ return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(); });
 }
 
+function PlaySound(soundObj,arrived) {
+  var audio = new Audio(soundObj);
+  audio.play();
+
+  if(!arrived){
+    audio.volume = 0.1;
+  }
+
+}
+
 function ScrollToBottom() {
   // Scroll Bottom
   var myDiv = document.getElementById("messagebox");
-  myDiv.scrollTop = myDiv.scrollHeight;
+  if(myDiv != null){
+    myDiv.scrollTop = myDiv.scrollHeight;
+  }
 }
 
 const ChatDashboard = () => {
@@ -72,7 +86,6 @@ const ChatDashboard = () => {
     })
   }
 
-  // console.log(GETLocalStorage("ListChat").data.rows.length +"=----"+CountListTemp)
   //Compare LocalStorage with API List
   if( GETLocalStorage("ListChat").data.rows.length != CountListTemp){
       getListChat()
@@ -97,10 +110,6 @@ const ChatDashboard = () => {
     HandleByOthers = HandleByOthers.filter(item => search.test(item.roomid));
     HandleByYou = HandleByYou.filter(item => search.test(item.roomid));
     NotHandle = NotHandle.filter(item => search.test(item.roomid));
-  }
-
-  if(HandleByOthers.length == 0 && HandleByYou.length == 0 & NotHandle.length == 0){
-    CloseList.push({roomid:"xxxxxxxxx"})
   }
 
   async function getListChat () {
@@ -143,7 +152,7 @@ const ChatDashboard = () => {
           
           SortArrayDESC(msg.data.rows)
           SETLocalStorage("ListChat", msg);
-
+          ScrollToBottom()
           setTemp(res)
         }
     }).catch((error) => {
@@ -363,17 +372,19 @@ const ChatDashboard = () => {
 
     socket.on("SendBackChat",(res)=>{
 
-      console.log("!!!!!!!",res)
       let chatWillUpdate = GETLocalStorage(res.roomid);
       chatWillUpdate.data.rows.push(res)
       
       SETLocalStorage(res.roomid, chatWillUpdate);
       setContent("")
       
-        
       ScrollToBottom()
     })
 
+    socket.on("beep",(res)=>{
+      PlaySound(ArrivedChatBeep,res)
+    })
+    
     // SendSuccess
     socket.on("SendSuccess",(res)=>{
       if(res.status)
@@ -383,10 +394,10 @@ const ChatDashboard = () => {
     });
 
     inputRef.current.focus();
+    ScrollToBottom()  
 
     // Component Did Update
     return () =>{
-      // ScrollToBottom()  
     }
   }, [Active]);
   

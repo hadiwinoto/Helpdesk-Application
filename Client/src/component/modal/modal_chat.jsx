@@ -13,8 +13,17 @@ import ChatPanelHD from '../listgroup/ChatCardHD';
 
 import socketIOClient from "socket.io-client";
 
+// BEEP
+import ArrivedChatBeep from '../../beep/newChat.mp3';
+
 const socket = socketIOClient("http://localhost:4000");
 
+
+function PlaySound(soundObj) {
+  var audio = new Audio(soundObj);
+  audio.play();
+  audio.volume = 0.1;
+}
 
 function SETLocalStorage(name,params) {
   localStorage.setItem(name, JSON.stringify(params));
@@ -30,7 +39,9 @@ function RemoveLocalStorage(name){
 
 function ScrollToBottom() {
   var myDiv = document.getElementById("ComplaintMassageBox2");
-  myDiv.scrollTop = myDiv.scrollHeight;
+  if(myDiv != null){
+    myDiv.scrollTop = myDiv.scrollHeight;
+  }
 }
 
 function ModalChat(props) {
@@ -53,8 +64,11 @@ function ModalChat(props) {
         await API.chat.GetChatDetail({ roomid:id}).then(res=>{ 
           
           SETLocalStorage(id,res);  
-          
           setTemp(res)
+
+          if(send){
+            ScrollToBottom()
+          }
         }).catch((error) => {
            alert(error)
         })
@@ -94,7 +108,7 @@ function ModalChat(props) {
         }
 
         socket.on("SendBackChat",(res)=>{
-
+    
           let chatWillUpdate = GETLocalStorage(res.roomid);
           chatWillUpdate.data.rows.push(res)
           
@@ -105,18 +119,28 @@ function ModalChat(props) {
           ScrollToBottom()
         })
 
-        // SendSuccess
+        socket.on("beep",(res)=>{
+          PlaySound(ArrivedChatBeep,res)
+        })
+
+        socket.on("FailedSend",(res)=>{
+          if(!res){
+            alert("Massage Failed to Send")
+          }
+        })
+
         socket.on("SendSuccess",(res)=>{
-          console.log(res)
+
           if(res.status)
           {
             getListChatDetails(res.data.roomid,'send')
           }
         });
 
-    
+        ScrollToBottom()
         // Component Did Update
         return () =>{
+         
         }
       }, []);
       return (

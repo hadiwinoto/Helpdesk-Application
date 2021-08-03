@@ -280,8 +280,8 @@ exports.SendChat = (req, res) => {
           
           if(!data){
             return res.status(404).send({
-              status : 1,
-              data : "Room id Not Found."
+              status : false,
+              data : "Room id Not Found. Send Chat Failed"
             });
           }
 

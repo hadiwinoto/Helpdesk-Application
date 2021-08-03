@@ -14,17 +14,22 @@ module.exports = server => {
       io.on("connection", (socket) => {
         
         socket.on("SendChat",(res)=>{
-          
+
           socket.emit("SendBackChat",res)
-
+          
+          
           POST("chat/send",res).then(res=>{
-              if(res.body){
-                socket.emit("SendSuccess",JSON.parse(res.body))
-              }else{
-                console.log("error URL")
-              }
+            let responses = res.body;
+            if(JSON.parse(responses).status){
+              socket.broadcast.emit("SendSuccess",JSON.parse(res.body))
+              socket.broadcast.emit("beep",true)
+              
+              socket.emit("SendSuccess",JSON.parse(res.body))
+              
+            }else{
+              socket.emit("FailedSend",false)
+            }
           })
-
         })
         
         console.log("New client connected");

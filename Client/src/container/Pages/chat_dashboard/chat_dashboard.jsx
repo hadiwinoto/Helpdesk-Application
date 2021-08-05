@@ -41,10 +41,7 @@ function PlaySound(soundObj,arrived) {
   var audio = new Audio(soundObj);
   audio.play();
 
-  if(!arrived){
-    audio.volume = 0.1;
-  }
-
+  audio.volume = 0.1;
 }
 
 function ScrollToBottom() {
@@ -373,6 +370,8 @@ const ChatDashboard = () => {
     socket.on("SendBackChat",(res)=>{
 
       let chatWillUpdate = GETLocalStorage(res.roomid);
+
+
       chatWillUpdate.data.rows.push(res)
       
       SETLocalStorage(res.roomid, chatWillUpdate);
@@ -383,6 +382,8 @@ const ChatDashboard = () => {
 
     socket.on("beep",(res)=>{
       PlaySound(ArrivedChatBeep,res)
+
+      CountList()
     })
     
     // SendSuccess

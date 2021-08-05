@@ -1,4 +1,4 @@
-import React, { useState,Fragment,useEffect,useRef} from 'react';
+import React, { useState,Fragment,useEffect} from 'react';
 import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, 
     MDBModalHeader, MDBModalFooter, MDBCol,MDBIcon, MDBRow  } from 'mdbreact';
 import { useParams } from "react-router-dom";
@@ -22,7 +22,6 @@ const socket = socketIOClient("http://localhost:4000");
 function PlaySound(soundObj) {
   var audio = new Audio(soundObj);
   audio.play();
-  audio.volume = 0.1;
 }
 
 function SETLocalStorage(name,params) {
@@ -49,7 +48,6 @@ function ModalChat(props) {
       const [modal, setModal] = useState(false);
       const [Content,setContent] = useState(null);
       const [Temp,setTemp] = useState(null)
-      const inputRef = useRef(null);
       const { id } = useParams();
 
       const closeModal = (modal) =>{
@@ -107,18 +105,6 @@ function ModalChat(props) {
           getListChatDetails(id,null)
         }
 
-        socket.on("SendBackChat",(res)=>{
-    
-          let chatWillUpdate = GETLocalStorage(res.roomid);
-          chatWillUpdate.data.rows.push(res)
-          
-          SETLocalStorage(res.roomid, chatWillUpdate);
-          setContent("")
-          
-            
-          ScrollToBottom()
-        })
-
         socket.on("beep",(res)=>{
           PlaySound(ArrivedChatBeep,res)
         })
@@ -137,15 +123,30 @@ function ModalChat(props) {
           }
         });
 
-        ScrollToBottom()
+        socket.on("SendBackChat",(res)=>{
+     
+          let chatWillUpdate = GETLocalStorage(res.roomid);
+
+          chatWillUpdate.data.rows.push(res)
+          
+          SETLocalStorage(res.roomid, chatWillUpdate);
+          setContent("")
+          
+            
+          ScrollToBottom()
+        })
+
         // Component Did Update
         return () =>{
+     
          
         }
       }, []);
       return (
         <Fragment>
-          <MDBBtn onClick={() => setModal(true)} color="primary">
+          <MDBBtn onClick={() => {
+            setModal(true)
+          }} color="primary">
             <MDBIcon icon="headset" className="mr-2" />
                 Live Chat
             </MDBBtn>
@@ -215,7 +216,7 @@ function ModalChat(props) {
                                     </MDBBtn>
                                     </MDBCol>
                                     <MDBCol className="d-flex align-items-center" size="8">
-                                        <input type="text" autocomplete="off" required  ref={inputRef} value={Content} onChange={(e)=>GetMsg(e)} value={Content} className="form-control" id="msg"/>
+                                        <input type="text" autocomplete="off" autoFocus  required  value={Content} onChange={(e)=>GetMsg(e)} value={Content} className="form-control" id="msghelp"/>
                                     </MDBCol>
                                     <MDBCol className="d-flex align-items-center" size="2">
                                     <MDBBtn size="sm"className="d-flex justify-content-center">

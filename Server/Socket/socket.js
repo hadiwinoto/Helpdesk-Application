@@ -11,9 +11,9 @@ module.exports = server => {
         }
       });
       
-      io.on("connection", (socket) => {
+      io.on("connection", (socket)   => {
         
-        socket.on("SendChat",(res)=>{
+         socket.on("SendChat",(res)=>{
 
           try{
             socket.emit("SendBackChat",res)
@@ -31,7 +31,7 @@ module.exports = server => {
                 socket.emit("FailedSend",false)
               }
             })
-            
+
           }catch{
             socket.emit("FailedSend",false)
           }

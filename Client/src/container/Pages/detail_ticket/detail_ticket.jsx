@@ -187,12 +187,12 @@ class DetailTicket extends React.Component {
                               { data.ticket_status == 'Process' && ( <ModalUpdatePage data={data}/> ) }
                               { data.ticket_status == 'Process' || data.ticket_status == 'Update' && ( <ModalResolvedPage data={data}/> ) }
                               { data.ticket_status == 'Update' && ( <ModalUpdatePage data={data}/> ) }
-                              { data.ticket_status != 'Close' && ( <ModalChat/> ) }
+                              {/* { data.ticket_status != 'Close' && ( <ModalChat/> ) } */}
                             </div>
                         ) 
                       }
                        <div className="text-center">
-                              { data.ticket_status != 'Close' && ( <ModalChat/> ) }
+                              { data.ticket_status != 'Close' && session.roles.includes("ROLE_COMPLAINER") ? ( <ModalChat/> ) : "" }
                           </div>
                         <MDBBtn color="primary" onClick={()=>this.goListTickets()}>
                           <MDBIcon icon="arrow-left" className="mr-1" /> Back

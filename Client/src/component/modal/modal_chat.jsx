@@ -168,7 +168,7 @@ function ModalChat(props) {
                                         <MDBCol className="ComplaintMassageBox p-3" id="ComplaintMassageBox2">
                                             {
                                                 GETLocalStorage(id).data.rows.map(chat=>{
-                                                    if(chat.sender == "Helpdesk"){
+                                                    if(chat.sender != Session.username){
                                                         return(
                                                           <MDBRow className="h-auto d-inline-block mt-3 w-100">
                                                         {/* Helpdesk */}

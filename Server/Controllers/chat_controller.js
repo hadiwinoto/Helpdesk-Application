@@ -45,6 +45,34 @@ exports.ListChatCount = (req,res) => {
     })
 }
 
+exports.ReadChat = (req,res) => {
+
+  RoomChatModel.update({read:0},{
+    where : {roomid : req.body.roomid, sender: req.body.sender}
+  })
+  .then(num =>{
+    if(num > 1){
+      res.send({
+        status : true,
+        message: "Read Chat was updated successfully."
+      });
+    }else{
+      res.send({
+        status : false,
+        message: `Cannot Read room with id=${req.body.roomid}. Maybe Room was not found or req.body is empty!`
+      });
+    }
+  })
+  .catch(err =>{
+    res.status(500).send({
+      status : false,
+      message: "Error Read with id=" + req.body.roomid
+    });
+  })
+
+}
+
+
 exports.CreateRoom = (req, res) => {
 
   // Validate request
@@ -305,13 +333,13 @@ exports.SendChat = (req, res) => {
 
                 const greetChat = {
                   roomid : req.body.roomid,
-                  sender : "Helpdesk",
+                  sender : "greeting",
                   message: `Selamat pagi Bapak/lbu Terima kasih sudah menghubungi Team Helpdesk.  
                             Kami telah menerima keluhan yang Anda sampaikan dengan ID keluhan ${req.body.roomid} 
                             dan saat ini keluhan Anda kami proses.  Jika Anda memiliki pertanyaan lebih lanjut, 
                             silakan sampaikan pertanyaan Anda.  Representatif kami akan segera melayani Anda`,
                   type: req.body.type,
-                  read: 1,
+                  read: 0,
                 };
 
               RoomChatModel.create(greetChat)

@@ -465,18 +465,18 @@ const ChatDashboard = () => {
                       
                       {
                         HandleByYou.map(list =>{
-                          
-                          //sum not already read
+                        
                           let read = 0;
-                          GETLocalStorage(list.roomid).data.rows.forEach(a=>{
-                            if(a.sender != Session.username && list.roomid != Active){
-                              read += parseInt(a.read)
-                            }
-                          })
-
                             let date = new Date(list.updatedAt), getDetail; 
                               if(GETLocalStorage(list.roomid)){
-                                getDetail = GETLocalStorage(list.roomid).data.rows;                                
+                                getDetail = GETLocalStorage(list.roomid).data.rows;   
+                                
+                                //sum not already read
+                                getDetail.forEach(a=>{
+                                  if(a.sender != Session.username && list.roomid != Active){
+                                    read += parseInt(a.read)
+                                  }
+                                })                             
                               }else{
                                 getDetail = []
                               }
@@ -507,22 +507,22 @@ const ChatDashboard = () => {
                         {
                           NotHandle.map(list =>{
 
-                            let read = 0;
-                            GETLocalStorage(list.roomid).data.rows.forEach(a=>{
-                              if(a.sender != Session.username){
-                                read += parseInt(a.read)
-                              }
-                            })
-
+                          let read = 0;
                             let date = new Date(list.updatedAt), getDetail; 
                             if(GETLocalStorage(list.roomid)){
-                              getDetail = GETLocalStorage(list.roomid).data.rows;                                               
+                              getDetail = GETLocalStorage(list.roomid).data.rows;     
+                              
+                              getDetail.forEach(a=>{
+                                if(a.sender != Session.username){
+                                  read += parseInt(a.read)
+                                }
+                              })  
                             }else{
                               getDetail = []
                             }
                               return(
                                 <MDBListGroup>
-                                    <MDBListGroupItem hover color="secondary" className={`p-2 m-1 mt-2 ${Active == list.roomid ? 'active' : ''}`} onClick={()=>setActive(list.roomid)} roomid={list.roomid}>
+                                    <MDBListGroupItem hover color="secondary" className={`p-2 m-1 mt-2 ${Active == list.roomid ? 'active' : ''}`} onClick={()=>{ReadChatAction(list.roomid,list.complainer_id); setActive(list.roomid)}} roomid={list.roomid}>
                                       <div className="d-flex w-100 justify-content-between">
                                       <h6 className="ticketno mb-1"><b>{list.complainer_id}</b> </h6>
                                         <small>

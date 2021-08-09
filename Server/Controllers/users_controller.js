@@ -2,6 +2,7 @@
 // const { response } = require("express");
 const db = require("../Models");
 const UserConnectModel = db.users_model;
+const RoleConnectModel = db.usersroles_model;
 const op = db.Sequelize.Op;
 
 exports.create = (req, res) => {
@@ -69,22 +70,42 @@ exports.getList = (req,res) => {
 
 }
 
-exports.get = (req,res) => {
-    var id = req.params.id;
-   
-    UserConnectModel.findByPk(id)
+exports.getTeknisi= (res) => {
+
+    const roleId = 2;
+    var condition = roleId ? {roleId : {[op.like] : `%${roleId}%`}} : null;
+
+    RoleConnectModel.findAll({where : condition})
     .then(data =>{
       res.send({
-        status: 1,
-        data : data || "Username no Existing"
+        status : true,
+        data : data
       });
     })
-    .catch(err =>{
-      res.status(500).send({
-        status : -1,
-        message: "Error retrieving Username =" + id
-      })
+    .catch(err=>{ 
+        res.status(500).send({
+          status : false,
+          message : err.message || "Some error occurred while retrieving Users."
+        })
     })
+}
+
+exports.get = (req,res) => {
+  var id = req.params.id;
+ 
+  UserConnectModel.findByPk(id)
+  .then(data =>{
+    res.send({
+      status: 1,
+      data : data || "Username no Existing"
+    });
+  })
+  .catch(err =>{
+    res.status(500).send({
+      status : -1,
+      message: "Error retrieving Username =" + id
+    })
+  })
 }
 
 exports.update = (req,res) => {

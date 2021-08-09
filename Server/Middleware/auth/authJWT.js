@@ -17,7 +17,7 @@ verifyToken = (req, res, next) => {
       if (err) {
         return res.status(401).send({
           status :-1,
-          message: "Toked Not Valid"
+          message: "Token Not Valid"
         });
       }
       req.userId = decoded.id;

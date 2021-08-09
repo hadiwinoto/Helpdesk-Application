@@ -1,5 +1,5 @@
 import { MDBContainer, MDBBtn, MDBModal, MDBInput, MDBModalBody, 
-  MDBModalHeader, MDBModalFooter, MDBCol, MDBRow,MDBAlert  } from 'mdbreact';
+  MDBModalHeader, MDBModalFooter, MDBCol, MDBRow,MDBAlert,MDBSelect   } from 'mdbreact';
   import SpinnerPageFull from '../loading_page/loading.page';
 import authHeader from '../../services/authHeader';
 import React, { Component,Fragment } from 'react';
@@ -18,7 +18,7 @@ class ModalHandlePage extends Component {
 state = {
   modal16: false,
   sendHandle : {
-      user_handler : JSON.parse(localStorage.getItem('user')).username,
+      user_handler :'',
       ticket_id: this.props.data.ticket_id,
       update_info :'Handle',
       target_troubleshoot: '',
@@ -26,8 +26,24 @@ state = {
   },
   errors:{
     target_troubleshoot: '',
-    description_info : ''
+    description_info : '',
+    user_handler:'',
   },
+
+  options: [
+    {
+      text: "Joko",
+      value: "1"
+    },
+    {
+      text: "Purwanto",
+      value: "2"
+    },
+    {
+      text: "Junaedi",
+      value: "3"
+    }
+  ],
   loading: false,
   hidden : '',
   success: false
@@ -102,6 +118,10 @@ validation(){
   if(this.state.sendHandle.description_info.length == 0){
     error['description_info'] = 'Required !'
   }
+
+  if(this.state.sendHandle.user_handler.length == 0){
+    error['user_handler'] = 'Required !'
+  }
   
   this.setState({ errors : error },()=>{
     if(validateForm(this.state.errors)){
@@ -131,7 +151,16 @@ render() {
                     <MDBInput label="Ticket ID"  hint={this.props.data.ticket_id} disabled type="text" />
                 </MDBCol>
                 <MDBCol sm="12" md="6">            
-                    <MDBInput label="Handler" hint={this.state.sendHandle.user_handler} disabled type="text" />
+                    <MDBInput label="Helpdesk" name="user_handler"  valueDefault="" onChange={(event)=>this.handleGetValue(event)}  type="text" />
+                    {
+                  this.state.errors.user_handler.length > 0 && (
+                    <div data-aos="fade-top">
+                    <MDBAlert color="danger p-1" >
+                       {this.state.errors.user_handler}
+                    </MDBAlert>
+                    </div>
+                  )
+                }
                 </MDBCol>
               <MDBCol sm="12" md="6">            
                 {/* <div className="custom-file mb-5 mt-4">
@@ -150,7 +179,7 @@ render() {
               <label className="grey-text" >
                 Target Resolved
               </label>        
-                <MDBInput type="datetime-local" size="lg" name="target_troubleshoot" onChange={(event)=>this.handleGetValue(event)}/>
+                <MDBInput type="datetime-local" size="lg" name="target_troubleshoot"  onChange={(event)=>this.handleGetValue(event)}/>
                 {
                   this.state.errors.target_troubleshoot.length > 0 && (
                     <div data-aos="fade-top">

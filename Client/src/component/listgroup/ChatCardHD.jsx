@@ -9,8 +9,9 @@ return (
     <MDBCol md="12" sm='12' lg="12" >
       <MDBCard color="elegant-color" text="white" className="text-center">
         <MDBCardBody className="p-2 text-left"> 
-            <MDBCardText style={{color:'white'}}>
-            {props.chat.message}
+            <MDBCardText className="d-flex justify-content-between" style={{color:'white'}}>
+            {props.chat.message} 
+            <small style={{color:"white",fontWeight:"bold",color:"#00bfff"}}>You</small>
             </MDBCardText>
             
             <MDBCardText style={{color:'white', fontWeight: "bold"}} className="text-right d-flex justify-content-end">

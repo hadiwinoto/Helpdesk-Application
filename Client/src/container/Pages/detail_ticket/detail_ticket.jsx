@@ -51,6 +51,7 @@ class DetailTicket extends React.Component {
 
   getTicket(){
     API.master.getOneTicket({ticket_id:this.props.match.params.id},authHeader()).then(res=>{
+      console.log(res)
       if(res.status){
         this.setState({
           ticket: res.data
@@ -60,13 +61,14 @@ class DetailTicket extends React.Component {
          }) 
         })
       }else{
-        Swal.fire({
-          icon: 'info',
-          title: 'Oops...',
-          text: res.message,
-        })
+            Swal.fire({
+              icon: 'info',
+              title: 'Oops...',
+              text: res.message,
+            })
       }
     }).catch(err=>{
+      this.props.history.push(`/`);
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -168,34 +170,34 @@ class DetailTicket extends React.Component {
                                     <a href={data.file_id} size="sm" download={data.file_id != '' ? new Date().getTime() : ''}>{ data.file_id != '' ? new Date().getTime()  : ''}</a>
                         </MDBTypography>
                       </MDBCol>    
+                      <MDBCol sm="12" md="12" className="mt-3">
                       { data.ticket_status == 'Resolved' && (session.roles.includes("ROLE_COMPLAINER") || session.roles.includes("ROLE_ADMIN")) && ( 
-                        <MDBCol sm="12" md="12" className="mt-3">
                           <div className="text-center">
                               <ModalClosePage data={data}/>
                               {/* <MDBBtn color="primary">
                                   <MDBIcon icon="reply" className="mr-1" /> Reopen
                               </MDBBtn>  */}
                           </div>
-                        </MDBCol>
                        )
                       }
                       {
                         (session.roles.includes("ROLE_ADMIN") || session.roles.includes("ROLE_HELPDESK")) && (
-                          <MDBCol sm="12" md="12" className="mt-3">
                             <div className="text-center">
-                              <MDBBtn color="primary" onClick={()=>this.goListTickets()}>
-                                <MDBIcon icon="arrow-left" className="mr-1" /> Back
-                              </MDBBtn>
                               { data.ticket_status == 'Open' && ( <ModalHandlePage data={data}/> ) }
                               { data.ticket_status == 'Process' && ( <ModalUpdatePage data={data}/> ) }
-                              { data.ticket_status == 'Process' && ( <ModalResolvedPage data={data}/> ) }
+                              { data.ticket_status == 'Process' || data.ticket_status == 'Update' && ( <ModalResolvedPage data={data}/> ) }
                               { data.ticket_status == 'Update' && ( <ModalUpdatePage data={data}/> ) }
-                              { data.ticket_status == 'Update' && ( <ModalUpdatePage data={data}/> ) }
-                              { data.ticket_status != 'Close' && ( <ModalChat/> ) }
+                              {/* { data.ticket_status != 'Close' && ( <ModalChat/> ) } */}
                             </div>
-                          </MDBCol>
-                        )
+                        ) 
                       }
+                       <div className="text-center">
+                              { data.ticket_status != 'Close' && session.roles.includes("ROLE_COMPLAINER") ? ( <ModalChat/> ) : "" }
+                          </div>
+                        <MDBBtn color="primary" onClick={()=>this.goListTickets()}>
+                          <MDBIcon icon="arrow-left" className="mr-1" /> Back
+                        </MDBBtn>
+                    </MDBCol>
                   </MDBRow>
                 </MDBJumbotron>
                 </MDBTabPane>

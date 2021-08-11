@@ -1,5 +1,5 @@
 import { MDBTabPane, MDBTabContent, MDBNav, MDBNavItem, MDBNavLink,MDBRow,
-        MDBCol,MDBListGroup, MDBListGroupItem,MDBIcon,MDBBtn,MDBAnimation} from 'mdbreact';
+        MDBCol,MDBListGroup, MDBListGroupItem,MDBIcon,MDBBtn,MDBAnimation,MDBBadge} from 'mdbreact';
 
 import React, { Fragment, useState,useEffect,useRef} from 'react';
 import API from '../../../services';
@@ -40,10 +40,6 @@ function SortArrayDESC(array) {
 function PlaySound(soundObj,arrived) {
   var audio = new Audio(soundObj);
   audio.play();
-
-  if(!arrived){
-    audio.volume = 0.1;
-  }
 
 }
 
@@ -130,6 +126,16 @@ const ChatDashboard = () => {
     })
 
     setListChat(msg)
+  }
+
+   function ReadChatAction(roomid,complainer_id){
+       API.chat.ReadChat({roomid:roomid, sender : complainer_id}).then(res=>{
+        getListChatDetails(roomid,null)
+        setTemp(res)
+
+      }).catch((error) => {
+        alert("Read Chat Error" + error)
+     })
   }
 
   async function getListChatDetails (roomid,send) {
@@ -227,7 +233,7 @@ const ChatDashboard = () => {
     BroadCast["createdAt"] = dateNow;
     BroadCast["updatedAt"] = dateNow;
     BroadCast["handler"] = Session.username;
-    BroadCast["sender"] = "Helpdesk";
+    BroadCast["sender"] = Session.username;
     BroadCast["message"] = Content;
     BroadCast["id"] = getChatLast;
     BroadCast["roomid"] = Active;
@@ -329,6 +335,10 @@ const ChatDashboard = () => {
         GETLocalStorage("ListChat").data.rows.map(e=>{
           if(e.roomid == Active){
             e.helpdesk_id = Session.username;
+            
+            // get complainer id for read
+            ReadChatAction(Active,e.complainer_id)
+
             e.updatedAt = moment(new Date()).format(); 
             msg.data.rows.push(e)
           }else{
@@ -337,7 +347,6 @@ const ChatDashboard = () => {
         })
 
         SortArrayDESC(msg.data.rows)
-
         SETLocalStorage("ListChat", msg);
         setActiveTabs("1")
         setActive(Active);
@@ -373,6 +382,8 @@ const ChatDashboard = () => {
     socket.on("SendBackChat",(res)=>{
 
       let chatWillUpdate = GETLocalStorage(res.roomid);
+
+
       chatWillUpdate.data.rows.push(res)
       
       SETLocalStorage(res.roomid, chatWillUpdate);
@@ -383,10 +394,14 @@ const ChatDashboard = () => {
 
     socket.on("beep",(res)=>{
       PlaySound(ArrivedChatBeep,res)
+      
+
+      CountList()
     })
     
     // SendSuccess
     socket.on("SendSuccess",(res)=>{
+
       if(res.status)
       {
         getListChatDetails(res.data.roomid,'send')
@@ -398,6 +413,7 @@ const ChatDashboard = () => {
 
     // Component Did Update
     return () =>{
+
     }
   }, [Active]);
   
@@ -449,18 +465,34 @@ const ChatDashboard = () => {
                       
                       {
                         HandleByYou.map(list =>{
+                        
+                          let read = 0;
                             let date = new Date(list.updatedAt), getDetail; 
                               if(GETLocalStorage(list.roomid)){
-                                getDetail = GETLocalStorage(list.roomid).data.rows;                                
+                                getDetail = GETLocalStorage(list.roomid).data.rows;   
+                                
+                                //sum not already read
+                                getDetail.forEach(a=>{
+                                  if(a.sender != Session.username && list.roomid != Active){
+                                    read += parseInt(a.read)
+                                  }
+                                })                             
                               }else{
                                 getDetail = []
                               }
                               return(
                                 <MDBListGroup>
-                                    <MDBListGroupItem hover color="secondary" className={`p-2 m-1 mt-2 ${Active == list.roomid ? 'active' : ''}`} onClick={()=>setActive(list.roomid)} roomid={list.roomid}>
+                                    <MDBListGroupItem hover color="secondary" className={`p-2 m-1 mt-2 ${Active == list.roomid ? 'active' : ''}`} onClick={()=>{ReadChatAction(list.roomid,list.complainer_id); setActive(list.roomid)}} roomid={list.roomid}>
                                       <div className="d-flex w-100 justify-content-between">
                                         <h6 className="ticketno mb-1"><b>{list.complainer_id}</b> </h6>
-                                        <small>{moment(date, "YYYYMMDD").fromNow()}</small>
+                                        <small>
+                                          {moment(date, "YYYYMMDD").fromNow()}
+                                          {
+                                            read > 0 && (
+                                              <MDBBadge color="danger" className="ml-2 notifList">{read }</MDBBadge>
+                                            )
+                                          }
+                                        </small>
                                       </div>
                                       <small><div class="elipsisChat"> <MDBIcon icon={getDetail.length != 0 ? getDetail[getDetail.length -1].id ? "check-double" : "check" : ""} className="mr-1"/> {getDetail.length != 0 ? getDetail[getDetail.length -1].message : 'Empty'}</div></small>
                                     </MDBListGroupItem> 
@@ -474,18 +506,32 @@ const ChatDashboard = () => {
                       <MDBTabPane tabId="2" role="tabpanel" >
                         {
                           NotHandle.map(list =>{
+
+                          let read = 0;
                             let date = new Date(list.updatedAt), getDetail; 
                             if(GETLocalStorage(list.roomid)){
-                              getDetail = GETLocalStorage(list.roomid).data.rows;                                               
+                              getDetail = GETLocalStorage(list.roomid).data.rows;     
+                              
+                              getDetail.forEach(a=>{
+                                if(a.sender != Session.username){
+                                  read += parseInt(a.read)
+                                }
+                              })  
                             }else{
                               getDetail = []
                             }
                               return(
                                 <MDBListGroup>
-                                    <MDBListGroupItem hover color="secondary" className={`p-2 m-1 mt-2 ${Active == list.roomid ? 'active' : ''}`} onClick={()=>setActive(list.roomid)} roomid={list.roomid}>
+                                    <MDBListGroupItem hover color="secondary" className={`p-2 m-1 mt-2 ${Active == list.roomid ? 'active' : ''}`} onClick={()=>{ReadChatAction(list.roomid,list.complainer_id); setActive(list.roomid)}} roomid={list.roomid}>
                                       <div className="d-flex w-100 justify-content-between">
                                       <h6 className="ticketno mb-1"><b>{list.complainer_id}</b> </h6>
-                                        <small>{moment(date, "YYYYMMDD").fromNow()}</small>
+                                        <small>
+                                          {moment(date, "YYYYMMDD").fromNow()}</small>
+                                        {
+                                            read > 0 && (
+                                              <MDBBadge color="danger" className="ml-2 notifList">{read }</MDBBadge>
+                                            )
+                                          }
                                       </div>
                                       <small><div class="elipsisChat">{getDetail.length != 0 ? getDetail[getDetail.length -1].message : 'Empty'}</div></small>
                                     </MDBListGroupItem> 
@@ -530,7 +576,7 @@ const ChatDashboard = () => {
                                   <div data-aos="fade-top">
                                   <div className="infomsg">
                                       <div class="ml-3">
-                                        {Active} - Unknown Problem
+                                        {Active}    
                                       </div>
       
                                       {
@@ -564,7 +610,7 @@ const ChatDashboard = () => {
                       {
                           GETLocalStorage(Active) != null && (
                               Active && GETLocalStorage(Active).data.rows.map(chat=>{
-                                if(chat.sender == "Helpdesk"){
+                                if(chat.sender == Session.username){
                                   return(
                                     <MDBRow className="h-auto d-inline-block mt-3 w-100">
                                     {/* Complainer */}

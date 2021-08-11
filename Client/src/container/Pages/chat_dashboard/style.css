@@ -36,7 +36,7 @@
 
 .bd-list-bottom{
     border-bottom: 1px solid #665f5f;
-    padding-top: 5PX;
+    padding-top: 0PX;
     padding-bottom: 11px;
 }
 
@@ -55,6 +55,13 @@
 .list .nav-item {
     /* border-bottom: 1px solid #424242 !important; */
     
+}
+
+.notifList{
+    position: absolute;
+    right: 18px;
+    bottom: 10px;
+    font-size: 13px;
 }
 
 .list .nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {

@@ -11,25 +11,31 @@ module.exports = server => {
         }
       });
       
-      io.on("connection", (socket) => {
+      io.on("connection", (socket)   => {
         
-        socket.on("SendChat",(res)=>{
+         socket.on("SendChat",(res)=>{
 
-          socket.emit("SendBackChat",res)
+          try{
+            socket.emit("SendBackChat",res)
+            
+            POST("chat/send",res).then(res=>{
+  
+              let responses = res.body;
+              if(JSON.parse(responses).status){
+                socket.broadcast.emit("SendSuccess",JSON.parse(res.body))
+                socket.broadcast.emit("beep",true)
+                
+                socket.emit("SendSuccess",JSON.parse(res.body))
+                
+              }else{
+                socket.emit("FailedSend",false)
+              }
+            })
+
+          }catch{
+            socket.emit("FailedSend",false)
+          }
           
-          
-          POST("chat/send",res).then(res=>{
-            let responses = res.body;
-            if(JSON.parse(responses).status){
-              socket.broadcast.emit("SendSuccess",JSON.parse(res.body))
-              socket.broadcast.emit("beep",true)
-              
-              socket.emit("SendSuccess",JSON.parse(res.body))
-              
-            }else{
-              socket.emit("FailedSend",false)
-            }
-          })
         })
         
         console.log("New client connected");

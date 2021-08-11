@@ -32,7 +32,9 @@ const GetChatDetail = (data,header) => Get(`api/chat/send`,false,true,header,dat
 const HandleChat = (data,header) => Put(`api/chat/handle`,false,true,header,data)
 const CountList = (data,header) => Get(`api/chat/count-list`,false,true,header,data)
 const OpenChat = (data,header) => Put(`api/chat/open`,false,true,header,data)
+const ReadChat = (data,header) => Put(`api/chat/read`,false,true,header,data)
 const GetListChat = (data,header) => Get(`api/chat`,false,true,header,data)
+const CreateRoom = (data,header) => Post(`api/chat`,false,true,header,data)
 // Export
 const API ={
     auth: {
@@ -63,6 +65,8 @@ const API ={
         HandleChat,
         CountList,
         OpenChat,
+        CreateRoom,
+        ReadChat
     }
 }
 

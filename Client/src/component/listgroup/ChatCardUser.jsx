@@ -7,8 +7,10 @@ return (
     <MDBCol md="12" sm='12' lg="12" >
       <MDBCard color="primary-color-dark" text="white" className="text-center">
         <MDBCardBody className="p-2 text-left"> 
-            <MDBCardText style={{color:'white'}}>
-              {props.chat.message}           
+            <MDBCardText  className="d-flex justify-content-between" style={{color:'white'}}>
+              {props.chat.message}    
+
+               <small style={{color:"white",fontWeight:"bold",color:"yellow"}}>{props.chat.sender}</small>   
              </MDBCardText>
             <MDBCardText style={{color:'white', fontWeight: "bold"}} className="text-right">
               {moment(date).format('LT')}

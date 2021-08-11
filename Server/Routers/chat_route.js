@@ -21,6 +21,8 @@ module.exports = app => {
     router.put("/open", chat_controller.OpenChat);
 
     router.put("/close", chat_controller.CloseChat);
+
+    router.put("/read", chat_controller.ReadChat);
     
     app.use('/api/chat', router);
   };  

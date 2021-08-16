@@ -74,7 +74,7 @@ post_handle(){
   this.setState({loading:true,hidden:'d-none'})
   
   API.processTicket.handleTicket(this.state.sendHandle,authHeader()).then(res=>{
-    if(res.status == 1){
+    if(res.status === 1){
       this.setState({
         success:true,
         loading:false
@@ -111,15 +111,15 @@ toggle = nr => () => {
 
 validation(){
   let error = {...this.state.errors};
-  if(this.state.sendHandle.target_troubleshoot.length == 0){
+  if(this.state.sendHandle.target_troubleshoot.length === 0){
       error['target_troubleshoot'] = 'Required !'
   }
   
-  if(this.state.sendHandle.description_info.length == 0){
+  if(this.state.sendHandle.description_info.length === 0){
     error['description_info'] = 'Required !'
   }
 
-  if(this.state.sendHandle.user_handler.length == 0){
+  if(this.state.sendHandle.user_handler.length === 0){
     error['user_handler'] = 'Required !'
   }
   

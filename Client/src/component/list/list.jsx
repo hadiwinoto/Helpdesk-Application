@@ -1,6 +1,8 @@
 import React from 'react';
 import { MDBCard, MDBCardBody, MDBIcon,MDBCardTitle, MDBCardText, MDBCardHeader, MDBBtn,MDBBadge, MDBContainer } from "mdbreact";
 
+const columns = ["Ticket ID", "Category Complaint", "Handle By", "Status"];
+
 class PanelPage extends React.Component {
     
     state={
@@ -28,6 +30,7 @@ render(){
           } 
           
           <h4><MDBBadge pill color="light" style={{width:'100px'}}>{data.ticket_status} </MDBBadge></h4>
+          <MDBBtn color="primary">Add</MDBBtn>
           </div>
         </MDBCardBody>
       </MDBCard>

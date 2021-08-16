@@ -7,6 +7,7 @@ import { MDBPagination, MDBPageItem, MDBPageNav } from "mdbreact";
 import { MDBBreadcrumb, MDBBreadcrumbItem } from "mdbreact";
 import { MDBFormInline, MDBIcon,MDBBadge } from "mdbreact";
 import { MDBCol, MDBContainer, MDBRow } from 'mdbreact';
+import { DataGrid } from '@material-ui/data-grid';
 
 import SpinnerPageFull from '../../../component/loading_page/loading.page';
 import FooterPage from '../../../component/footer/footerPage';

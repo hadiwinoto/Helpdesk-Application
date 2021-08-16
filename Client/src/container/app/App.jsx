@@ -58,9 +58,7 @@ class App extends React.Component {
                     <MDBNavLink to='/home'>Home</MDBNavLink>
                     </MDBNavItem>
                   )}
-                  <MDBNavItem>
-                    <MDBNavLink onClick={()=> this.logout()} to="/">Logout</MDBNavLink>
-                  </MDBNavItem>
+                 
                 </MDBNavbarNav>
                 <MDBNavbarNav right>
                   <MDBNavItem>
@@ -75,6 +73,7 @@ class App extends React.Component {
                         <MDBDropdownItem href='/profile'> Profile</MDBDropdownItem>
                       )}
                         <MDBDropdownItem href="#!" >Reset Password</MDBDropdownItem>
+                        <MDBDropdownItem onClick={()=> this.logout()} href="/" >Logout</MDBDropdownItem>
                       </MDBDropdownMenu>
                     </MDBDropdown>
                   </MDBNavItem>

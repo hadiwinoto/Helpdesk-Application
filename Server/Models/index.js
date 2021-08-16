@@ -24,6 +24,7 @@ db.update_info_model = require("./update_info_model.js")(Sequelize,connectMysql)
 db.ticket_model = require("./ticket_model.js")(Sequelize,connectMysql);
 db.users_model = require("./users_model.js")(Sequelize,connectMysql);
 db.roles_model = require("./roles_model.js")(Sequelize,connectMysql);
+db.usersroles_model = require("./usersroles_model.js")(Sequelize,connectMysql);
 
 // Chat 
 db.room_model = require("./room.js")(Sequelize,connectMysql);

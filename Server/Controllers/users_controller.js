@@ -67,27 +67,22 @@ exports.getList = (req,res) => {
           message : err.message || "Some error occurred while retrieving Users."
         })
     })
-
 }
 
-exports.getTeknisi= (res) => {
-
-    const roleId = 2;
-    var condition = roleId ? {roleId : {[op.like] : `%${roleId}%`}} : null;
-
-    RoleConnectModel.findAll({where : condition})
-    .then(data =>{
-      res.send({
-        status : true,
-        data : data
-      });
-    })
-    .catch(err=>{ 
-        res.status(500).send({
-          status : false,
-          message : err.message || "Some error occurred while retrieving Users."
-        })
-    })
+exports.getTeknisi= (req,res) => {
+  RoleConnectModel.findAll ({where : { roleId: 2 } })
+  .then(data =>{
+    res.send({
+      status : true,
+      data : data
+    });
+  })
+  .catch(err=>{ 
+      res.status(500).send({
+        status : false,
+        message : err.message || "Some error occurred while retrieving Users."
+      })
+  })
 }
 
 exports.get = (req,res) => {

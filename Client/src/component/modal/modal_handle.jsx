@@ -6,6 +6,9 @@ import React, { Component,Fragment } from 'react';
 import API from '../../services';
 import Swal from 'sweetalert2';
 
+import {Autocomplete} from '@material-ui/lab';
+import TextField from '@material-ui/core/TextField';
+
 function validateForm (errors) {
   let valid = true;
       Object.values(errors).forEach(val =>{
@@ -29,21 +32,7 @@ state = {
     description_info : '',
     user_handler:'',
   },
-
-  options: [
-    {
-      text: "Joko",
-      value: "1"
-    },
-    {
-      text: "Purwanto",
-      value: "2"
-    },
-    {
-      text: "Junaedi",
-      value: "3"
-    }
-  ],
+  teknisi:[],
   loading: false,
   hidden : '',
   success: false
@@ -66,6 +55,13 @@ handleGetValue(event){
 }
 
 componentDidMount(){
+
+  API.processTicket.getTeknisi(null,authHeader()).then(res=>{
+    let getTeknisi = {...this.state};
+    getTeknisi.teknisi = res.data;
+    this.setState(getTeknisi)
+  })
+
   window.scrollTo(0, 0) 
 }
 
@@ -131,6 +127,7 @@ validation(){
 }
 
 render() {
+  console.log(this.state)
   return (
     <Fragment>
         <MDBBtn onClick={this.toggle(16)} color="primary">
@@ -150,8 +147,22 @@ render() {
                 <MDBCol sm="12" md="6">            
                     <MDBInput label="Ticket ID"  hint={this.props.data.ticket_id} disabled type="text" />
                 </MDBCol>
-                <MDBCol sm="12" md="6">            
-                    <MDBInput label="Helpdesk" name="user_handler"  valueDefault="" onChange={(event)=>this.handleGetValue(event)}  type="text" />
+                <MDBCol sm="12" md="6">
+                <Autocomplete
+                  id="combo-box-demo"
+                  options={this.state.teknisi}
+                  getOptionLabel={(option) => option.username}
+                  style={{ width: 300 }}
+                  onChange={(event,value)=>{
+                  
+                  let sendHandle = {...this.state}
+                  sendHandle.sendHandle.user_handler = value.username
+                  console.log(sendHandle)
+                  this.setState(sendHandle)
+                }}
+                  renderInput={(params) => <TextField {...params} label="Helpdesk" variant="outlined" />}
+                />
+                    {/* <MDBInput label="Helpdesk" name="user_handler"  valueDefault="" onChange={(event)=>this.handleGetValue(event)}  type="text" /> */}
                     {
                   this.state.errors.user_handler.length > 0 && (
                     <div data-aos="fade-top">

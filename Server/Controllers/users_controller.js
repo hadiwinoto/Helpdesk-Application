@@ -70,7 +70,7 @@ exports.getList = (req,res) => {
 }
 
 exports.getTeknisi= (req,res) => {
-  RoleConnectModel.findAll ({where : { roleId: 2 } })
+  RoleConnectModel.findAll ({where : { roleId: 1 } })
   .then(data =>{
     res.send({
       status : true,

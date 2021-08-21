@@ -3,7 +3,7 @@ import Globalprovider, { GlobalConsumer } from '../../context/context';
 import { BrowserRouter as Router, Route} from "react-router-dom";
 
 import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNavbarToggler, MDBCollapse, MDBDropdown,
-  MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBIcon, MDBContainer } from "mdbreact";
+  MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBIcon, MDBContainer,MDBBadge,MDBListGroupItem,MDBListGroup  } from "mdbreact";
 
 // CSS
 import './App.css'
@@ -60,7 +60,44 @@ class App extends React.Component {
                   )}
                  
                 </MDBNavbarNav>
+             
                 <MDBNavbarNav right>
+                <MDBNavItem className="mr-3">
+                    <MDBDropdown>
+                      <MDBDropdownToggle nav caret>
+                        <MDBIcon icon="bell" /> 
+                        <MDBBadge color="danger" className="notif-all">4</MDBBadge>
+                      </MDBDropdownToggle>
+                      <MDBDropdownMenu className="dropdown-default notif-drop mr-3 mt-3 p-1" >
+                      <MDBListGroup >
+                        <MDBListGroupItem href="#">
+                          <div className="d-flex w-100 justify-content-between">
+                            <h6 className="mb-1"><b>COP-20210719-0000005</b></h6>
+                            <small>3 days ago</small>
+                          </div>
+                          <p className="mb-1">Return Materials</p>
+                          <small>Critical</small>
+                        </MDBListGroupItem>
+                        <MDBListGroupItem hover href="#">
+                          <div className="d-flex w-100 justify-content-between">
+                            <h6 className="mb-1"><b>COP-20210719-00000053</b></h6>
+                            <small className="text-muted">3 days ago</small>
+                          </div>
+                          <p className="mb-1">Tower Telecomunication</p>
+                          <small className="text-muted">Critical</small>
+                        </MDBListGroupItem>
+                        <MDBListGroupItem hover href="#">
+                          <div className="d-flex w-100 justify-content-between">
+                            <h6 className="mb-1"><b>COP-20210719-000000531</b></h6>
+                            <small className="text-muted">3 days ago</small>
+                          </div>
+                          <p className="mb-1">Return Materials</p>
+                          <small className="text-muted">Critical</small>
+                        </MDBListGroupItem>
+                      </MDBListGroup>
+                      </MDBDropdownMenu>
+                    </MDBDropdown>
+                  </MDBNavItem>
                   <MDBNavItem>
                     <MDBDropdown>
                       <MDBDropdownToggle nav caret>

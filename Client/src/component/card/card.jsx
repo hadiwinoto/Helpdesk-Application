@@ -7,7 +7,7 @@ class CardExample extends React.Component {
         return (
             <Fragment>
             <MDBCol style={{ maxWidth: "100%" }}>
-            <MDBCard className="mt-3">
+            <MDBCard className="mt-3 card-menu">
                 <MDBCardImage className="img-fluid mx-auto w-50 mt-4 mb-4" src={this.props.img}
                 waves />
                 <MDBCardBody className="text-center">

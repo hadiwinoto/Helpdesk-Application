@@ -175,43 +175,51 @@
       const {infoValidation} = this.state;
       return (
           <Fragment>
-            <div data-aos="fade-down">
-              <MDBBreadcrumb color="indigo lighten-4" className="breadcrumb-style">
-                <MDBBreadcrumbItem appendIcon icon="caret-right" className="breadcrumb-style">Signin</MDBBreadcrumbItem>
+            <div data-aos="fade-down d-flex justify-content-center">
+              <MDBBreadcrumb color="indigo lighten-4" className="breadcrumb-style justify-content-center">
+                <h3 className="mt-1"><b>PT Panca Putra Solusindo</b></h3>
               </MDBBreadcrumb>
             </div>
-              <MDBContainer className="mt-5 mb-3">
+              <MDBContainer className="mt-5 h-auto" style={{borderRadius:20,padding:25}}>
                 <MDBRow>
-                  <MDBCol md="12" sm="12" className="mb-3">
+                  <MDBCol md="12" sm="6" className="mb-3">
                     <div class="text-center">
                       <img src={logo} class="rounded mx-auto d-block" id="logo-center" alt="logo"/>
                     </div>
                     </MDBCol>
-                    <MDBCol sm="12" md="12">
+                  </MDBRow>
+                  <MDBRow>
+                    <MDBCol sm="6" md="6" className="offset-3">
                       <div class="form-group">
                         <label for="username">Username
                         </label>
-                        <input type="input" ref={(input) => { this.nameInput = input; }}  onChange={(property)=> this.handleGetValue(property)} name="username" class={'form-control form-control-lg '+ infoValidation.username.formInfo} id="username"/>
-                        {infoValidation.username.errorMessage.length > 0 && <div class={infoValidation.username.spanInfo+' mt-2'}>{infoValidation.username.errorMessage}</div>}
+                        <input type="input" size="sm" ref={(input) => { this.nameInput = input; }}  onChange={(property)=> this.handleGetValue(property)} name="username" class={'form-control form-control-lg '+ infoValidation.username.formInfo} id="username"/>
+                        {/* {infoValidation.username.errorMessage.length > 0 && <div class={infoValidation.username.spanInfo+' mt-2'}>{infoValidation.username.errorMessage}</div>} */}
                       </div>
                     </MDBCol>
-                    <MDBCol sm="12" md="12">
+                  </MDBRow>
+                  <MDBRow>
+                    <MDBCol sm="6" md="6" className="offset-3">
                       <div class="form-group">
                         <label for="password">Password
                         </label>
-                        <input type="password" onChange={(event)=> this.handleGetValue(event)} name="password" class={'form-control form-control-lg ' + infoValidation.password.formInfo} id="password"/>
-                        {infoValidation.password.errorMessage.length > 0 &&  <div class={infoValidation.password.spanInfo+' mt-2'}>{infoValidation.password.errorMessage}</div>}
+                        <input type="password" size="sm" onChange={(event)=> this.handleGetValue(event)} name="password" class={'form-control form-control-lg ' + infoValidation.password.formInfo} id="password"/>
+                        {/* {infoValidation.password.errorMessage.length > 0 &&  <div class={infoValidation.password.spanInfo+' mt-2'}>{infoValidation.password.errorMessage}</div>} */}
                       </div>
                     </MDBCol>
-                    <MDBCol sm="12" md="12" className="text-center mt-2">
-                        <MDBBtn  color="primary"  onClick={(event)=> this.handleSubmit(event)} className="btn-lg  btn-block">
+                  </MDBRow>
+                  <MDBRow>
+                    <MDBCol sm="12" md="12" className="text-center">
+                        <MDBBtn  color="primary"  onClick={(event)=> this.handleSubmit(event)} className="btn-md">
                          {this.state.loading ? ( 
                             <SpinnerPage/>
                          ) : 'Sign In' }
                          <MDBIcon far icon="paper-plane" className={this.state.loading ? 'd-none' : 'ml-2'} />
                         </MDBBtn>   
                     </MDBCol>  
-                    <MDBCol md="12" sm="12" className="d-flex justify-content-center mt-5">
+                  </MDBRow>
+                  <MDBRow>
+                    <MDBCol md="12" sm="6" className="d-flex justify-content-center mt-5">
                       <p className="font-large grey-text">
                         Don't have an account?
                         <a

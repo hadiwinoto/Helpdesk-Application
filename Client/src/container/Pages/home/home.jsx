@@ -38,6 +38,9 @@ state={
 }
 
 componentDidMount(){
+
+
+
     // Check is registry with params, if no only check token header
     const params = this.props.match.params;
     if(params.username && params.token){
@@ -59,8 +62,13 @@ checkHeader(){
         this.props.dispatch({
             type:'navbarShow'
         })
+
+        if(JSON.parse(localStorage.getItem('user')).roles.length == 0){
+            localStorage.removeItem('user') 
+            Swal.fire('Information', "Check your role for access this application, Please Contact Administrator !",'info')
+        }
         // Get Roles
-        this.setState({
+        return this.setState({
             roles : JSON.parse(localStorage.getItem('user')).roles
         })
     }).catch(err=>{

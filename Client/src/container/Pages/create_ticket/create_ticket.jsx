@@ -48,8 +48,9 @@ const priority = [
 function getKeyProblem(a)
 {
     let active;
+    // eslint-disable-next-line array-callback-return
     category.map((data,index) =>{
-        if(data.title == a){
+        if(data.title === a){
             active = index
         }
     })
@@ -117,17 +118,17 @@ handleValue(prop,step){
     let {name,value} = prop.target
     let valueCheck = value ? value : ''
  
-    if(name == 'category_complant' && valueCheck.length == 0){
+    if(name === 'category_complant' && valueCheck.length === 0){
         errors[stepObject][name] = `Category Complain cannot be empty`
-    }else if (name == 'priority' && valueCheck.length == 0){
+    }else if (name === 'priority' && valueCheck.length === 0){
         errors[stepObject][name] = `Priority cannot be empty`
-    }else if (name == 'trouble_time' && valueCheck.length == 0){
+    }else if (name === 'trouble_time' && valueCheck.length === 0){
         errors[stepObject][name] = `Trouble Time cannot be empty`
-    }else if (name == 'description_complaint' && valueCheck.length == 0){
+    }else if (name === 'description_complaint' && valueCheck.length === 0){
         errors[stepObject][name] = `Description Complaint cannot be empty`
-    }else if (name == 'address' && valueCheck.length == 0){
+    }else if (name === 'address' && valueCheck.length === 0){
         errors[stepObject][name] = `Location Problem cannot be empty`
-    }else if (name == 'msisdn' && valueCheck.length == 0){
+    }else if (name === 'msisdn' && valueCheck.length === 0){
         errors[stepObject][name] = `Customer Number cannot be empty`
     }else{
         // Remove Alert
@@ -147,7 +148,7 @@ handleValue(prop,step){
     let form = this.state.form[`question_${step}`]
 
     for(var key in form) {
-        if(form[key] == 0){
+        if(form[key] === 0){
           const event  = {
               target :{
                 name : key,

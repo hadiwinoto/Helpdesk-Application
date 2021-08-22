@@ -1,6 +1,6 @@
 
 html,body,#root{
-    background-color: #F1F1F1;
+    /* background-color: #F1F1F1; */
     height: 100%;
     width: 100%;
 }
@@ -9,12 +9,29 @@ html,body,#root{
     background: red;
     font-size: 20px;
 }
+
+.notif-drop{
+    top: 53px;
+    right: 50px !important;
+    min-width: 20rem !important;
+
+}
+
 .navbar{
     justify-content: flex-start;
 }
 
 .navbar h3{
     color: #FFFFFF;
+}
+
+.notif-all{
+    position: absolute;
+    left: -14px;
+}
+
+.show .dropdown-menu{
+    background: #f1f1f1;
 }
 
 .breadcrumb li{

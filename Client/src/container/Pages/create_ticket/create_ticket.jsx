@@ -383,7 +383,7 @@ handleValue(prop,step){
                     <Fragment>   
                     <MDBRow>
                         <MDBCol className="text-center">
-                            <MDBJumbotron style={{"font-size":"12px","font-weight":"bold","background":"#E5E5E5","color":"#21293A"}} className="p-3 check">
+                            {/* <MDBJumbotron style={{"font-size":"12px","font-weight":"bold","background":"#E5E5E5","color":"#21293A"}} className="p-3 check"> */}
                                 <MDBRow className="p-2">
                                     <MDBCol md="12" sm="12" className="p-2 d-flex justify-content-between cols">
                                         <div>Problem Category</div> <span>{active.form.question_0.category_complant}</span>
@@ -420,7 +420,7 @@ handleValue(prop,step){
                                        <span style={{"text-align":"justify"}}>{active.form.question_1.description_complaint}</span>
                                     </MDBCol>
                                 </MDBRow>
-                            </MDBJumbotron>
+                            {/* </MDBJumbotron> */}
                             <MDBRow className="mt-2 mb-4">
                                     <MDBCol className="text-center">
                                         <MDBBtn size="sm" onClick={()=>this.handleReset()} color="primary">
@@ -438,7 +438,7 @@ handleValue(prop,step){
                     </Fragment>
                     ) : (
                     <Fragment>
-                        <MDBJumbotron className="mt-3 h-100">
+                        {/* <MDBJumbotron className="mt-3 h-100"> */}
                         <MDBRow>
                             <MDBCol sm="12" md="12">
                                     <MDBRow>
@@ -649,7 +649,7 @@ handleValue(prop,step){
                                     </MDBBtn>
                                 </MDBCol>
                         </MDBRow>
-                        </MDBJumbotron>
+                        {/* </MDBJumbotron> */}
                     </Fragment>
                     )}
             </MDBContainer>

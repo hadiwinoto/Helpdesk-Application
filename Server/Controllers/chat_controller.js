@@ -145,7 +145,11 @@ exports.ChatDetails = (req,res) => {
             message : err.message || "Some error occurred while retrieving List Chats."
           })
       })
-  
+}
+
+exports.getFileData = (req,res) => {
+
+
 }
 
 exports.HandleChat = (req,res) => {

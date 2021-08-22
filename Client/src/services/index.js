@@ -35,6 +35,9 @@ const OpenChat = (data,header) => Put(`api/chat/open`,false,true,header,data)
 const ReadChat = (data,header) => Put(`api/chat/read`,false,true,header,data)
 const GetListChat = (data,header) => Get(`api/chat`,false,true,header,data)
 const CreateRoom = (data,header) => Post(`api/chat`,false,true,header,data)
+
+const getTeknisi = (data,header) => Get(`api/users/get/teknisi`,false,true,header,data)
+
 // Export
 const API ={
     auth: {
@@ -55,7 +58,8 @@ const API ={
         handleTicket,
         updateTicket,
         resolvedTicket,
-        closeTicket
+        closeTicket,
+        getTeknisi
     },
     chat:{
         HandOverHandler,

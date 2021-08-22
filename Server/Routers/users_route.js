@@ -6,6 +6,7 @@ module.exports = app => {
     router.post("/", users_controller.create);
     
     router.get("/", users_controller.getList);
+    
     router.get("/get/teknisi", users_controller.getTeknisi);
   
     router.get("/:id", users_controller.get);

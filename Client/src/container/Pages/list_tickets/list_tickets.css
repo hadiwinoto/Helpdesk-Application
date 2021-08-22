@@ -5,3 +5,8 @@
 .iconsrc{
     cursor: pointer !important;
 }
+
+tbody  tr  td {
+    font-weight: bold;
+    /* border-bottom: 1px solid grey !important; */
+}

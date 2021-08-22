@@ -2,11 +2,10 @@ import { GlobalConsumer } from '../../../context/context';
 import authHeader from '../../../services/authHeader';
 import React, { Fragment } from 'react';
 
-import { MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBAlert } from "mdbreact";
-import { MDBPagination, MDBPageItem, MDBPageNav } from "mdbreact";
+import { MDBBtn} from "mdbreact";
 import { MDBBreadcrumb, MDBBreadcrumbItem } from "mdbreact";
-import { MDBFormInline, MDBIcon,MDBBadge } from "mdbreact";
-import { MDBCol, MDBContainer, MDBRow } from 'mdbreact';
+import { MDBCol, MDBIcon, MDBRow } from 'mdbreact';
+import { MDBDataTable  } from 'mdbreact';
 
 import SpinnerPageFull from '../../../component/loading_page/loading.page';
 import FooterPage from '../../../component/footer/footerPage';
@@ -24,17 +23,66 @@ function getMonth (e){
 
 class ListTickets extends React.Component {
 
+
   state={
-    allTickets : [],
-    status: "All",
-    handleYou:'',
-    searchData : '',
-    h100: 'h-100',
     loader: true,
-    nodata: false,
-    currentPage: 0,
-    totalPages:0,
-    session : JSON.parse(localStorage.getItem('user'))
+    session : JSON.parse(localStorage.getItem('user')),
+    data:{
+      columns: [
+        {
+          label: 'Ticket ID',
+          field: 'ticket_id',
+          width: 300,
+          attributes: {
+            'aria-controls': 'DataTable',
+            'aria-label': 'Name',
+          },
+        },
+        {
+          label: 'Title',
+          field: 'title',
+          width: 270,
+        },
+        {
+          label: 'Category',
+          field: 'category_complant',
+          width: 300,
+        },
+        {
+          label: 'MSISDN',
+          field: 'msisdn',
+          sort: 'asc',
+          width: 100,
+        },
+        {
+          label: 'Priority',
+          field: 'priority',
+          sort: 'disabled',
+          width: 150,
+        },
+        {
+          label: 'Handler',
+          field: 'user_handler',
+          sort: 'disabled',
+          width: 100,
+        },
+        {
+          label: 'Status',
+          field: 'ticket_status',
+          sort: 'disabled',
+          width: 100,
+        },
+        {
+          label: 'Detail',
+          field: 'action',
+          sort: 'disabled',
+          width: 100,
+        },
+      ],
+     rows:[
+        
+     ],
+    }
   }
 
   componentDidMount(){
@@ -49,22 +97,47 @@ class ListTickets extends React.Component {
 
     var params = {
       ticket_status: states.status == 'All' ? '' : states.status,
-      user_handler:states.handleYou, 
-      ticket_id : states.searchData,
-      page:states.currentPage,
       complainer_user: states.session.roles.includes("ROLE_ADMIN") ? '' :  states.session.username
     } 
 
     API.master.getTickets(params,authHeader()).then(res=>{
       if(res.data.totalItems > 0){
-        return this.setState({ allTickets: res.data.tickets, 
-                               loader: false, 
-                               h100: res.data.tickets.length < 3 ? 'h-100' : null,
-                               totalPages:res.data.totalPages,
-                               currentPage: res.data.currentPage
-                               })
+
+        let Resdata = res; 
+
+        var data = {...this.state.data}
+
+        let addEvent = [];
+
+        Resdata.data.tickets.forEach(m =>{
+          let result = {}
+          result['ticket_id'] = m.ticket_id
+          result['title'] = m.title
+          result['category_complant'] = m.category_complant
+          result['msisdn'] = m.msisdn
+          result['user_handler'] = m.user_handler
+          result['priority'] = m.priority
+          result['user_handler'] = m.user_handler 
+          result['ticket_status'] = m.ticket_status
+          if(m.ticket_status == "Open"){
+            result['rowClassNames'] = 'bg-warning'
+
+          }
+          result['action'] = <h5 className="d-flex"><MDBBtn color="primary " onClick={()=>this.handleDetail(m.ticket_id )} size="sm"><MDBIcon fas icon="search" size="1x" /></MDBBtn> 
+          {/* <MDBBtn color="unique" size="sm"><MDBIcon fas icon="trash-alt" size="1x" /></MDBBtn> */}
+          </h5>
+
+          addEvent.push(result)
+      })
+
+      data['rows'] = addEvent
+
+      this.setState({data, loader:false})                      
+      
+                               
       }else{
-        return this.setState({allTickets: [],nodata: true, h100: 'h-100',loader:false})
+        
+        return this.setState({loader:false})
       }  
     }).catch(err=>{
         this.props.dispatch({type:'navbarHide'})
@@ -77,198 +150,45 @@ class ListTickets extends React.Component {
       this.setState({
           status: event.target.outerText
       },()=>{
-          this.setState({loader:true,allTickets:[],h100:'h-100',nodata:false})
+          this.setState({loader:true,})
           this.getAllTicket()
       })
   }
-  
-  handleSearch(event){
-    this.setState({searchData : event.target.value})
-  }
-  
-  submitSearch(event){
-    event.preventDefault();
-    this.setState({loader:true,allTickets:[],h100:'h-100',nodata:false})
-    this.getAllTicket()
-  }
 
-  changePage(index){
-    this.setState({
-      currentPage: index.target.outerText - 1,
-      loader:true,allTickets:[],h100:'h-100',
-    },()=>{
-      this.getAllTicket()
-    })
-  }
-  
-  next(){
-    if(this.state.currentPage != (this.state.totalPages -1)){  
-      this.setState({
-        currentPage: this.state.currentPage + 1,
-        loader:true,allTickets:[],h100:'h-100'
-      },()=>{
-        this.getAllTicket()
-      })
-    }
-  }
-
-  previous(){
-    if(!this.state.currentPage == 0){
-        this.setState({
-          currentPage: this.state.currentPage - 1,
-          loader:true,allTickets:[],h100:'h-100'
-        },()=>{
-          this.getAllTicket()
-        })
-    }
-  }
-
-  handleYou(event){
-    console.log(event.target.checked)
-    if(event.target.checked){
-      this.setState({
-        handleYou: event.target.value
-      },()=>{
-        this.setState({loader:true,allTickets:[],h100:'h-100',nodata:false})
-        this.getAllTicket()
-      })
-    }else{
-      this.setState({
-        handleYou: ''
-      },()=>{
-        this.setState({loader:true,allTickets:[],h100:'h-100',nodata:false})
-        this.getAllTicket()
-      })
-    }
-  }
 
   handleDetail = (id) =>{
     this.props.history.push(`/detail-ticket/${id}`);
   }
 
   render() {
-    let temp = '*'
-    let listPage = [];
-    let state = this.state;
-    let session = this.state.session;
-    for(var i = 1;i <= state.totalPages; i++){ 
-     if(i - 1 == state.currentPage){
-       listPage.push(<MDBPageItem active><MDBPageNav>{i}</MDBPageNav></MDBPageItem>)
-     }else{
-       listPage.push(<MDBPageItem onClick={(event)=>this.changePage(event)}><MDBPageNav>{i}</MDBPageNav></MDBPageItem>)
-     }
-    }
 
     return (
         <Fragment>
             <div data-aos="fade-right">
-              <MDBBreadcrumb color="indigo lighten-4">
-                <MDBContainer className="d-flex">
+              <MDBBreadcrumb color="indigo lighten-4 m-3">
+                
                   <MDBBreadcrumbItem appendIcon icon="caret-right">Home</MDBBreadcrumbItem>
                   <MDBBreadcrumbItem appendIcon icon="caret-right" active>List Ticket</MDBBreadcrumbItem>
-                </MDBContainer>
+         
               </MDBBreadcrumb>
             </div>
-            <MDBContainer className={this.state.h100}>
-            <MDBCol>
-              <MDBFormInline onSubmit={(event) => this.submitSearch(event)} className="md-form d-flex justify-content-center">
-              <MDBIcon icon="search" style={{cursor:"pointer"}} className="text-grey iconsrc" />
-                <input className="form-control form-control-md ml-3" onChange={(event)=> this.handleSearch(event)} style={{width:"45%"}} type="text" placeholder="Ticket ID" aria-label="Search" />
-                <MDBDropdown className="ml-3">
-                  <MDBDropdownToggle
-                    color="primary"
-                    size="md"
-                    className="m-0"
-                  >
-                  <b>{this.state.status}</b> <MDBIcon icon="caret-down" className="ml-1" />
-                  </MDBDropdownToggle>
-                  <MDBDropdownMenu color="white" right>
-                    <MDBDropdownItem onClick={(event)=>this.listStatus(event)}>All</MDBDropdownItem>
-                    <MDBDropdownItem onClick={(event)=>this.listStatus(event)}>Open</MDBDropdownItem>
-                    <MDBDropdownItem onClick={(event)=> this.listStatus(event)}>Close</MDBDropdownItem>
-                    <MDBDropdownItem onClick={(event)=> this.listStatus(event)}>Process</MDBDropdownItem>
-                    <MDBDropdownItem onClick={(event)=>this.listStatus(event)}>Resolved</MDBDropdownItem>
-                  </MDBDropdownMenu>
-                </MDBDropdown>
-              </MDBFormInline>
-            </MDBCol>
-            {
-              session.roles.includes("ROLE_ADMIN") && (
-                <MDBCol sm="12">
-                <div class="custom-control custom-checkbox ml-4">
-                  <input type="checkbox" name="handleyou" 
-                  value={session.username} 
-                  onChange={(event)=> this.handleYou(event)} class="custom-control-input" id="defaultChecked2"/>
-                  <label class="custom-control-label" for="defaultChecked2">Handle By You</label>
-                </div>
-                </MDBCol>
-              )
-            }
-            <MDBCol >
-            {this.state.loader && (<SpinnerPageFull/>)}
-               
-              {this.state.nodata && (
-                <div data-aos="fade-left">
-                  <div className="text-center mt-4">
-                    <MDBAlert color="primary" >
-                      Complaint Not Found
-                    </MDBAlert>
-                  </div>
-                </div>
-              )}
-
-              { 
-                this.state.allTickets.map(data =>{
-               
-                  let date = new Date(data.trouble_time);
-                  let dateNow = new Date();
-                  let dateDisplay;
-                  dateDisplay = `${date.getDate()} ${getMonth(date.getMonth())} ${date.getFullYear()}`;
-                  if(date.getDate()+date.getMonth() == temp){
-                    return(<PanelPage data={data} handleDetail={this.handleDetail}/>)                    
-                  }else{
-                    temp = date.getDate()+date.getMonth()
-                      return(<Fragment>
-                        <div className="text-center mt-5">
-                          <h3><MDBBadge pill color="light">{`${dateDisplay}`}</MDBBadge></h3>
-                        </div>
-                        <PanelPage 
-                        data={data}
-                        handleDetail={this.handleDetail}
-                        />
-                      </Fragment>)
-                  }
-                })
-              }
-            </MDBCol>
-            </MDBContainer>
-            <MDBCol>
-              <MDBContainer className="d-flex justify-content-center">
-              <MDBRow>
-                <MDBCol>
-                  <MDBPagination className="mt-5 mb-4">
-                    <MDBPageItem >
-                      <MDBPageNav onClick={()=>this.previous()} aria-label="Previous">
-                        <span aria-hidden="true">Previous</span>
-                      </MDBPageNav>
-                    </MDBPageItem>
-                    {
-                      listPage.map(data=>{
-                        return(data)
-                      })
-                    }
-                    <MDBPageItem> 
-                      <MDBPageNav onClick={()=>this.next()} aria-label="Previous">
-                        <span aria-hidden="true">Next</span>
-                      </MDBPageNav>
-                    </MDBPageItem>
-                  </MDBPagination>
-                </MDBCol>
-              </MDBRow>
-              </MDBContainer>
-            </MDBCol>
            
-            <FooterPage/>
+            <MDBCol className="p-3">
+              <MDBDataTable 
+              hover 
+              entriesOptions={[5, 20, 25]} 
+              entries={5} 
+              searchTop
+              bordered
+              searchBottom={false} 
+              pagesAmount={4} 
+              responsive 
+              theadColor="bg-primary"
+              borderless
+              theadTextWhite 
+              small 
+              data={this.state.data} />
+            </MDBCol>
         </Fragment>
     );
   }

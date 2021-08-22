@@ -21,6 +21,7 @@ import batch from './menu-img/batch.png'
 import audit from './menu-img/audit.png'
 import chat from './menu-img/chat.png'
 import list from './menu-img/list.png'
+import './home.css'
 
 
 class Home extends React.Component {
@@ -37,6 +38,9 @@ state={
 }
 
 componentDidMount(){
+
+
+
     // Check is registry with params, if no only check token header
     const params = this.props.match.params;
     if(params.username && params.token){
@@ -58,8 +62,13 @@ checkHeader(){
         this.props.dispatch({
             type:'navbarShow'
         })
+
+        if(JSON.parse(localStorage.getItem('user')).roles.length == 0){
+            localStorage.removeItem('user') 
+            Swal.fire('Information', "Check your role for access this application, Please Contact Administrator !",'info')
+        }
         // Get Roles
-        this.setState({
+        return this.setState({
             roles : JSON.parse(localStorage.getItem('user')).roles
         })
     }).catch(err=>{
@@ -101,11 +110,11 @@ render() {
     const ROLE_COMPLAINER = (
         <Fragment>
             <MDBRow>
-            <MDBCol md="6" sm="12">
+            <MDBCol md="3" sm="12">
                 <div data-aos="fade-up">
                     <div data-aos="fade-up">
                             <MDBCol className="w-100">
-                            <MDBCard className="mt-3">
+                            <MDBCard className="mt-3 card-menu">
                                 <MDBCardImage className="img-fluid mx-auto w-50 mt-4 mb-4" src={coaching}
                                 waves />
                                 <MDBCardBody className="text-center">
@@ -118,10 +127,10 @@ render() {
                     </div>
                 </div>
             </MDBCol>
-            <MDBCol md="6" sm="12">
+            <MDBCol md="3" sm="12">
                 <div data-aos="fade-up">
                 <MDBCol className="w-100">
-                    <MDBCard className="mt-3">
+                    <MDBCard className="mt-3 card-menu">
                                 <MDBCardImage className="img-fluid mx-auto w-50 mt-4 mb-4" src={audit}
                                 waves />
                                 <MDBCardBody className="text-center">
@@ -146,10 +155,10 @@ render() {
     const ROLE_HELPDESK = (
         <Fragment>
             <MDBRow>
-                    <MDBCol md="6" sm="12">
+                    <MDBCol md="4" sm="12">
                          <div data-aos="fade-up">
                             <MDBCol className="w-100">
-                            <MDBCard className="mt-3">
+                            <MDBCard className="mt-3 card-menu">
                                 <MDBCardImage className="img-fluid mx-auto w-50 mt-4 mb-4" src={list}
                                 waves />
                                 <MDBCardBody className="text-center">
@@ -161,29 +170,27 @@ render() {
                             </MDBCol>
                         </div>
                     </MDBCol>
-                    <MDBCol md="6" sm="12">
+                    <MDBCol md="4" sm="12">
                         <div data-aos="fade-up">
                             <CardExample title="Batch Handle" desc="Batch Handle Tickets, Update, Close, Resolve" img={batch}></CardExample>
                         </div>
                     </MDBCol>
-            </MDBRow>
-            <MDBRow>
-            <MDBCol md="6" sm="12">
-                    <div data-aos="fade-up">
-                      
-                        <MDBCol className="w-100">
-                            <MDBCard className="mt-3">
-                                <MDBCardImage className="img-fluid mx-auto w-50 mt-4 mb-4" src={chat}
-                                waves />
-                                <MDBCardBody className="text-center">
-                                <MDBCardTitle>Chat Dashboard</MDBCardTitle>
-                                <MDBCardText>All chat Complaint from Customers</MDBCardText>
-                                <MDBBtn gradient="blue" onClick={()=>this.ChatDashboard()} className="btn-lg btn-block">Open</MDBBtn>
-                                </MDBCardBody>
-                            </MDBCard>
-                            </MDBCol>
-                    </div>
-            </MDBCol>
+                    <MDBCol md="4" sm="12">
+                            <div data-aos="fade-up">
+                            
+                                <MDBCol className="w-100">
+                                    <MDBCard className="mt-3 card-menu">
+                                        <MDBCardImage className="img-fluid mx-auto w-50 mt-4 mb-4" src={chat}
+                                        waves />
+                                        <MDBCardBody className="text-center">
+                                        <MDBCardTitle>Chat Dashboard</MDBCardTitle>
+                                        <MDBCardText>All chat Complaint from Customers</MDBCardText>
+                                        <MDBBtn gradient="blue" onClick={()=>this.ChatDashboard()} className="btn-lg btn-block">Open</MDBBtn>
+                                        </MDBCardBody>
+                                    </MDBCard>
+                                    </MDBCol>
+                            </div>
+                    </MDBCol>
             </MDBRow>
         </Fragment>
     )
@@ -191,10 +198,10 @@ render() {
     const ROLE_ADMIN = (
         <Fragment>
             <MDBRow>
-                    <MDBCol md="6" sm="12">
+                    <MDBCol md="3" sm="12">
                          <div data-aos="fade-up">
                             <MDBCol className="w-100">
-                            <MDBCard className="mt-3">
+                            <MDBCard className="mt-3 card-menu">
                                 <MDBCardImage className="img-fluid mx-auto w-50 mt-4 mb-4" src={list}
                                 waves />
                                 <MDBCardBody className="text-center">
@@ -206,17 +213,17 @@ render() {
                             </MDBCol>
                         </div>
                     </MDBCol>
-                    <MDBCol md="6" sm="12">
+                    <MDBCol md="3" sm="12">
                     <div data-aos="fade-up">
-                        <CardExample title="Report" desc="Customer Complaint Dashboard" img={report}></CardExample>
+                        <CardExample className="card-menu"  title="Report" desc="Customer Complaint Dashboard" img={report}></CardExample>
                     </div>
                     </MDBCol>
-                </MDBRow>
-                <MDBRow>
-                    <MDBCol md="6" sm="12">
+                {/* </MDBRow>
+                <MDBRow> */}
+                    <MDBCol md="3" sm="12">
                         <div data-aos="fade-up">
                             <MDBCol className="w-100">
-                            <MDBCard className="mt-3">
+                            <MDBCard className="mt-3 card-menu">
                                 <MDBCardImage className="img-fluid mx-auto w-50 mt-4 mb-4" src={chat}
                                 waves />
                                 <MDBCardBody className="text-center">
@@ -228,25 +235,55 @@ render() {
                             </MDBCol>
                         </div>
                     </MDBCol>
-                    <MDBCol md="6" sm="12">
+                    <MDBCol md="3" sm="12">
                         <div data-aos="fade-up">
-                            <CardExample title="Batch Handle" desc="Batch Handle Tickets, Update, Close, Resolve" img={batch}></CardExample>
+                            <CardExample className="mt-3 card-menu" title="Batch Handle" desc="Batch Handle Tickets, Update, Close, Resolve" img={batch}></CardExample>
                         </div>
                     </MDBCol>
-                </MDBRow>
-                <MDBRow>
-                    <MDBCol md="6" sm="12">
+                    <MDBCol md="3" sm="12">
                         <div data-aos="fade-up">
-                            <CardExample title="Broadcast Incident" desc="Broadcast Incident To All customer or Individual for Send Information" img={broad}></CardExample>
+                            <CardExample className="mt-3 card-menu" title="Broadcast Incident" desc="Broadcast Incident To All customer or Individual for Send Information" img={broad}></CardExample>
                         </div>
                     </MDBCol >
-                    <MDBCol md="6" sm="12">
+                    <MDBCol md="3" sm="12">
                         <div data-aos="fade-up">
-                            <CardExample title="Management Settings" desc="Management Administrator for settings Role and Activation Accounts" img={setting}></CardExample>
+                            <CardExample className="mt-3 card-menu" title="Management Settings" desc="Management Administrator for settings Role and Activation Accounts" img={setting}></CardExample>
                         </div>
                     </MDBCol>
+                    <MDBCol md="3" sm="12">
+                <div data-aos="fade-up">
+                    <div data-aos="fade-up">
+                            <MDBCol className="w-100">
+                            <MDBCard className="mt-3 card-menu">
+                                <MDBCardImage className="img-fluid mx-auto w-50 mt-4 mb-4" src={coaching}
+                                waves />
+                                <MDBCardBody className="text-center">
+                                <MDBCardTitle>Create Complaint</MDBCardTitle>
+                                <MDBCardText>Report Complaint, Discribe your Problem</MDBCardText>
+                                <MDBBtn gradient="blue" onClick={()=>this.toCreateTicket()} className="btn-lg btn-block">Open</MDBBtn>
+                                </MDBCardBody>
+                            </MDBCard>
+                            </MDBCol>
+                    </div>
+                </div>
+            </MDBCol>
+            <MDBCol md="3" sm="12">
+                <div data-aos="fade-up">
+                <MDBCol className="w-100">
+                    <MDBCard className="mt-3 card-menu">
+                                <MDBCardImage className="img-fluid mx-auto w-50 mt-4 mb-4" src={audit}
+                                waves />
+                                <MDBCardBody className="text-center">
+                                <MDBCardTitle>Complaint History</MDBCardTitle>
+                                <MDBCardText>Display History Complaint</MDBCardText>
+                                <MDBBtn gradient="blue" onClick={()=>this.toListTicket()} className="btn-lg btn-block">Open</MDBBtn>
+                                </MDBCardBody>
+                    </MDBCard>
+                </MDBCol>
+                </div>
+            </MDBCol>
                 </MDBRow>
-                {ROLE_COMPLAINER}
+               
         </Fragment>
     )
     let roles = this.state.roles;
@@ -267,20 +304,20 @@ render() {
         <Fragment>
         {/* <Sidebar/> */}
             <div data-aos="fade-right">
-            <MDBBreadcrumb color="indigo lighten-4">
+            {/* <MDBBreadcrumb color="indigo lighten-4">
               <MDBContainer className="d-flex">
                 <MDBBreadcrumbItem appendIcon icon="caret-right" active>Home</MDBBreadcrumbItem>
               </MDBContainer>
-            </MDBBreadcrumb>
+            </MDBBreadcrumb> */}
             </div>
-            <MDBContainer className={this.state.roles.length == 0 ? 'mt-2 h-100' : 'mt-2 '}> 
+            <div className="p-3"> 
                 {
                     this.state.roles.length == 0 ? <SpinnerPageFull/> : null
                 }
                 {
                     declare
                 }
-            </MDBContainer>
+            </div>
             {/* <FooterPage/> */}
         </Fragment>
     );

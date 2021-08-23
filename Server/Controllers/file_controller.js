@@ -3,6 +3,7 @@
 const db = require("../Models");
 const FilechatModel = db.filechat;
 const op = db.Sequelize.Op;
+const path = require('path')
 
 
 
@@ -17,6 +18,7 @@ exports.create = (req,res) => {
 
 const filechat = {
   filename : req.file.originalname,
+  type     : path.extname(req.file.filename),
 };
 
 FilechatModel.create(filechat)

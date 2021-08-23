@@ -6,7 +6,7 @@ module.exports = app => {
   // const { authJwt } = require('../Middleware');
 
   const storage = multer.diskStorage({
-    destination:'./Storage/uploads/',
+    destination:'./Storage/chat/',
     filename:(req, file, cb) => {
       return cb(null,`${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
     }

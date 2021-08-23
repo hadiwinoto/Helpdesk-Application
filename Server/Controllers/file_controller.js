@@ -16,7 +16,7 @@ exports.create = (req,res) => {
 }
 
 const filechat = {
-  filename : req.file.filename,
+  filename : req.file.originalname,
 };
 
 FilechatModel.create(filechat)

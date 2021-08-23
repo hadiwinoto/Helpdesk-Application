@@ -1,6 +1,7 @@
 
 // const { response } = require("express");
 const db = require("../Models");
+const multer = require('multer')
 const Filechat = db.filechat;
 const op = db.Sequelize.Op;
 
@@ -15,6 +16,10 @@ exports.create = (req, res) => {
         return;
     }
     const file = {
+        fileid : req.body.fileid,
+        base64 : req.body.base64,
+        filename: req.body.filename,
+        type: req.body.type,
         
     };
 
@@ -33,10 +38,9 @@ exports.create = (req, res) => {
     });
 };
 
-exports.get = (req,res) => {
-    var id = req.params.filid;
-   
-    Filechat.findByPk(id)
+exports.getFile = (req,res) => {
+    var fileid = req.params.fileid;
+    Filechat.findByPk(fileid)
     .then(data =>{
       if(data){
         res.send({
@@ -53,7 +57,7 @@ exports.get = (req,res) => {
     .catch(err =>{
       res.status(500).send({
         status : -1,
-        message: "Error retrieving Data with id=" + id
+        message: "Error retrieving Data with id=" + fileid
       })
     })
 }

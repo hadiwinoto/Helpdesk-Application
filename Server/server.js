@@ -73,6 +73,7 @@ require("./Routers/ticket_route.js")(app);
 require("./Routers/dashboard.route.js")(app); 
 require("./Routers/update_info_route.js")(app); 
 require("./Routers/process_ticket_route.js")(app);
+require("./Routers/file_route.js")(app);
 
 
 server.listen(port, () => {

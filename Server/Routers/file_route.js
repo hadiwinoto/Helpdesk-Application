@@ -1,12 +1,24 @@
 module.exports = app => {
-
-  const file_controller = require("../Controllers/file_controller.js");
-  const { authJwt } = require('../Middleware');
-
   var router = require("express").Router();
+  const multer = require('multer');
+  const path = require('path');
+  const controller = require("../Controllers/file_controller");
+  // const { authJwt } = require('../Middleware');
 
-  router.get("/getfile/:fileid", file_controller.getFile);
-  router.post("/upload", file_controller.create);
+  const storage = multer.diskStorage({
+    destination:'./Storage/uploads/',
+    filename:(req, file, cb) => {
+      return cb(null,`${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
+    }
+  })
 
-  app.use('/api/file',[authJwt.verifyToken], router);
+  const upload = multer({
+    storage: storage
+  })
+
+
+  router.get("/:fileid",controller.getDataFile);
+  router.post("/upload",upload.single('filename'),controller.create);
+
+  app.use('/api/file', router);
 };  

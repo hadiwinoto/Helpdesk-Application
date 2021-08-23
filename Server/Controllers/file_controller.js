@@ -1,29 +1,25 @@
 
 // const { response } = require("express");
 const db = require("../Models");
-const multer = require('multer')
-const Filechat = db.filechat;
+const FilechatModel = db.filechat;
 const op = db.Sequelize.Op;
 
-exports.create = (req, res) => {
 
-    // Validate request
-    if(!req.body) {
-        res.status(400).send({
-          status: false,
-          message: "Content can not be empty!"
-        });
-        return;
-    }
-    const file = {
-        fileid : req.body.fileid,
-        base64 : req.body.base64,
-        filename: req.body.filename,
-        type: req.body.type,
-        
-    };
 
-    Filechat.create(file)
+exports.create = (req,res) => {
+  if(!req.body) {
+    res.status(400).send({
+      status: false,
+      message: "Content can not be empty!"
+    });
+    return;
+}
+
+const filechat = {
+  filename : req.file.filename,
+};
+
+FilechatModel.create(filechat)
     .then(data => {
         res.send({
           status : true,
@@ -33,14 +29,15 @@ exports.create = (req, res) => {
     .catch(err => {
         res.status(500).send({
           status: false,
-          message : err.message ||  "Some error occurred"
+          message : err.message ||  "Some error occurred while creating the Tutorial."
         });
     });
-};
 
-exports.getFile = (req,res) => {
-    var fileid = req.params.fileid;
-    Filechat.findByPk(fileid)
+}
+
+exports.getDataFile = (req,res) => {
+  var id = req.params.fileid;
+  FilechatModel.findByPk(id)
     .then(data =>{
       if(data){
         res.send({
@@ -57,7 +54,9 @@ exports.getFile = (req,res) => {
     .catch(err =>{
       res.status(500).send({
         status : -1,
-        message: "Error retrieving Data with id=" + fileid
+        message: "Error retrieving Data with id=" + id
       })
     })
-}
+};
+
+

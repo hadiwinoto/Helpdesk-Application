@@ -147,11 +147,6 @@ exports.ChatDetails = (req,res) => {
       })
 }
 
-exports.getFileData = (req,res) => {
-
-
-}
-
 exports.HandleChat = (req,res) => {
 
   

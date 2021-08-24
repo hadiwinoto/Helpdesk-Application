@@ -89,7 +89,7 @@ exports.getList = (req,res) => {
   const excludes = ['file_id','address','description_complaint']
   Ticket.findAndCountAll({ 
   where : condition, limit, offset,
-  order: [['trouble_time', 'DESC']],
+  order: [['createdAt', 'DESC']],
   attributes:
       {exclude:excludes}
   })

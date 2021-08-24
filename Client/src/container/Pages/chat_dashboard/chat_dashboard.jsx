@@ -4,6 +4,7 @@ import { MDBTabPane, MDBTabContent, MDBNav, MDBNavItem, MDBNavLink,MDBRow,
 import React, { Fragment, useState,useEffect,useRef} from 'react';
 import API from '../../../services';
 import moment from 'moment'
+import { GlobalConsumer } from '../../../context/context';
 
 import './style.css';
 import hd from './image/hd.png';
@@ -51,7 +52,7 @@ function ScrollToBottom() {
   }
 }
 
-const ChatDashboard = () => {
+const ChatDashboard = (props) => {
 
   // Check Login User
   if(!localStorage.getItem('user')){
@@ -373,6 +374,8 @@ const ChatDashboard = () => {
   }
   
   useEffect( ()  => {
+
+    props.dispatch({type:'navbarShow'})
     
     //Compare localstroge with api
     if(Active == null){
@@ -680,4 +683,5 @@ const ChatDashboard = () => {
   );
 }
 
-export default ChatDashboard;
+export default GlobalConsumer(ChatDashboard);
+// export default ChatDashboard;

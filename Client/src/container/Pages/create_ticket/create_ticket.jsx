@@ -68,7 +68,7 @@ constructor(props){
 }
     
 state = {
-        oader : false,
+        loader : false,
         selectedFiles: "",
         activeStep : 0, 
         form : {    
@@ -442,7 +442,7 @@ handleValue(prop,step){
                         <MDBRow>
                             <MDBCol sm="12" md="12">
                                     <MDBRow>
-                                        <MDBCol md="12" sm="12">
+                                        <MDBCol md="6" sm="12" className="offset-md-3">
                                             {
                                                 active.activeStep == 0 ? (
                                                 <div data-aos="fade-right">
@@ -469,7 +469,7 @@ handleValue(prop,step){
                                         {
                                             active.activeStep == 0 && (
                                                 <Fragment>
-                                                    <MDBCol md="12" sm="12" className="mt-4">
+                                                    <MDBCol md="6" sm="12" className="mt-4 offset-md-3">
                                                     <label>Problem Category</label>
                                                     <Autocomplete
                                                         id="combo-box-demo"
@@ -493,7 +493,7 @@ handleValue(prop,step){
                                                         renderInput={(params) => <TextField {...params} label="Select" variant="outlined" />}
                                                         />
                                                     </MDBCol>
-                                                    <MDBCol sm="12" md="12">
+                                                    <MDBCol sm="12" md="6">
                                                     {
                                                         active.error.question_0.category_complant.length > 0 && 
                                                             <div data-aos="fade-top">
@@ -505,7 +505,7 @@ handleValue(prop,step){
                                                                         
                                                     }
                                                     </MDBCol>
-                                                    <MDBCol className="mt-3 p-3">
+                                                    <MDBCol sm="12" md="6" className="mt-3 p-3 offset-md-3">
                                                     <label>Priority</label>
                                                     <select 
                                                     className="browser-default custom-select mt-2" 
@@ -522,7 +522,7 @@ handleValue(prop,step){
                                                     }
                                                     </select>
                                                     </MDBCol>
-                                                    <MDBCol md="12" sm="12">
+                                                    <MDBCol md="6" sm="12" className="offset-md-3">
                                                      {
                                                         active.error.question_0.priority.length > 0 && 
                                                             <div data-aos="fade-top">
@@ -540,7 +540,7 @@ handleValue(prop,step){
                                         {
                                             active.activeStep == 1 && (
                                                 <Fragment>
-                                                    <MDBCol md="12" sm="12" className="mt-4">
+                                                    <MDBCol md="6" sm="12" className="mt-4 offset-md-3">
                                                         <label>Trouble Time Problem</label>
                                                         <MDBInput outline size="lg" onChange={(a)=>this.handleValue(a,active.activeStep)} 
                                                         value={active.form.question_1.trouble_time}
@@ -548,7 +548,7 @@ handleValue(prop,step){
                                                         name="trouble_time"
                                                         />
                                                     </MDBCol>
-                                                    <MDBCol sm="12" md="12">
+                                                    <MDBCol sm="12" md="6" className="offset-md-3">
                                                     {
                                                         active.error.question_1.trouble_time.length > 0 && 
                                                             <div data-aos="fade-top">
@@ -560,14 +560,14 @@ handleValue(prop,step){
                                                                         
                                                     }
                                                     </MDBCol>
-                                                    <MDBCol md="12" sm="12" className="mt-4">
+                                                    <MDBCol md="6" sm="12" className="mt-4 offset-md-3">
                                                         <label>Detail Problem</label>
                                                          <MDBInput type="textarea"  
                                                           onChange={(a)=>this.handleValue(a,active.activeStep)}  
                                                           outline label="" 
                                                           name="description_complaint" valueDefault={active.form.question_1.description_complaint} rows="3" />
                                                     </MDBCol>
-                                                    <MDBCol sm="12" md="12">
+                                                    <MDBCol sm="12" md="6" className="offset-md-3">
                                                     {
                                                         active.error.question_1.description_complaint.length > 0 && 
                                                             <div data-aos="fade-top">
@@ -579,7 +579,7 @@ handleValue(prop,step){
                                                                         
                                                     }
                                                     </MDBCol>
-                                                    <MDBCol md="12" sm="12" className="mt-4">
+                                                    <MDBCol md="6" sm="12" className="mt-4 offset-md-3">
                                                          <label>Location Problem</label>
                                                          <div className="text-right">
                                                             <MDBBtn color="primary" size="sm" onClick={()=>this.setCurrentLocation()} outline className="">
@@ -589,7 +589,7 @@ handleValue(prop,step){
                                                          </div>
                                                         <MDBInput type="textarea" onChange={(a)=>this.handleValue(a,active.activeStep)} outline label="" name="address" value={active.form.question_1.address} rows="3" />
                                                     </MDBCol>
-                                                    <MDBCol sm="12" md="12">
+                                                    <MDBCol sm="12" md="6" className="offset-md-3">
                                                     {
                                                         active.error.question_1.address.length > 0 && 
                                                             <div data-aos="fade-top">
@@ -601,11 +601,11 @@ handleValue(prop,step){
                                                                         
                                                     }
                                                     </MDBCol>
-                                                    <MDBCol md="12" sm="12" className="mt-2">
+                                                    <MDBCol md="6" sm="12" className="mt-2 offset-md-3">
                                                          <label>Customer Number</label>
                                                          <MDBInput outline hint="" name="msisdn" value={active.form.question_1.msisdn} onChange={(a)=>this.handleValue(a,active.activeStep)} type="text" />
                                                     </MDBCol>
-                                                    <MDBCol sm="12" md="12">
+                                                    <MDBCol sm="12" md="6" className="offset-md-3">
                                                     {
                                                         active.error.question_1.msisdn.length > 0 && 
                                                             <div data-aos="fade-top">

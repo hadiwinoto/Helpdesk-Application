@@ -51,7 +51,7 @@ class DetailTicket extends React.Component {
 
   getTicket(){
     API.master.getOneTicket({ticket_id:this.props.match.params.id},authHeader()).then(res=>{
-      console.log(res)
+
       if(res.status){
         this.setState({
           ticket: res.data
@@ -69,11 +69,6 @@ class DetailTicket extends React.Component {
       }
     }).catch(err=>{
       this.props.history.push(`/`);
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Something went wrong!',
-      })
     })
   }
 

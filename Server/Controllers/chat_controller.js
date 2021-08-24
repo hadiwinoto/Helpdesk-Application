@@ -1,4 +1,4 @@
-const { room_chat_model } = require("../Models");
+  const { room_chat_model } = require("../Models");
 const db = require("../Models");
 
 const RoomChatModel = db.room_chat_model;
@@ -314,8 +314,9 @@ exports.SendChat = (req, res) => {
 
     RoomModel.findByPk(req.body.roomid)
         .then(data =>{
+         
           // IF room id not already created, will crate room first
-          if(!data){
+          if(data == null){
 
              const room = {
                 roomid : req.body.roomid,
@@ -324,10 +325,10 @@ exports.SendChat = (req, res) => {
                 status: "Open",
                 closetime: null
             };
-
+          
             RoomModel.create(room)
             .then(data => {
-
+            
                 // Helpdesk Greeting
 
                 const greetChat = {
@@ -343,12 +344,8 @@ exports.SendChat = (req, res) => {
 
               RoomChatModel.create(greetChat)
               .then(data => {
-                
-                return res.status(200).send({
-                  status: true,
-                  message : "Chat Delivered !",
-                  data :data
-                });   
+              
+              // Empty Response, Because to Finnaly Block 
 
               }).catch(err => {
                     
@@ -441,18 +438,12 @@ exports.SendChat = (req, res) => {
                       message : err.message ||  "Some error occurred while Updated the Rooms."
                     });
                 });
-          
-            // }else{
-            //   return res.status(404).send({
-            //     status : 1,
-            //     data : "Handler not found, please Handle first"
-            //   });
-            // }
 
           }
 
         })
         .catch(err=>{ 
+       
             res.status(500).send({
               status : false,
               message : err.message || "Some error Send Chat."

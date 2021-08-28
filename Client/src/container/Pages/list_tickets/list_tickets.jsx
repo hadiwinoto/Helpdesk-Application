@@ -168,7 +168,7 @@ class ListTickets extends React.Component {
               <MDBBreadcrumb color="indigo lighten-4 m-3">
                 
                   <MDBBreadcrumbItem appendIcon icon="caret-right">Home</MDBBreadcrumbItem>
-                  <MDBBreadcrumbItem appendIcon icon="caret-right" active>List Ticket</MDBBreadcrumbItem>
+                  <MDBBreadcrumbItem appendIcon icon="caret-right" active>List Tickets</MDBBreadcrumbItem>
          
               </MDBBreadcrumb>
             </div>

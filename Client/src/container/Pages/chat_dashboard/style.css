@@ -3,6 +3,10 @@
     height: 100%;
 }
 
+.chat-container{
+    max-width: 1370px !important;
+}
+
 .list{
     background: #232335;
     height: 100vh;

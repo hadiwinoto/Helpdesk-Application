@@ -422,7 +422,7 @@ const ChatDashboard = (props) => {
   
   return (
     <Fragment>
-        <div className="container">
+        <div className="container chat-container">
             { Loader && ( <LoadingChat/> ) }
             <MDBRow >
                 <MDBCol className="list p-2 scrollbar-black bordered-black square thin" sm="12" md="5" xl="4" >

@@ -148,7 +148,7 @@ handleValue(prop,step){
     let form = this.state.form[`question_${step}`]
 
     for(var key in form) {
-        if(form[key] === 0){
+        if(form[key].length === 0){
           const event  = {
               target :{
                 name : key,
@@ -493,7 +493,7 @@ handleValue(prop,step){
                                                         renderInput={(params) => <TextField {...params} label="Select" variant="outlined" />}
                                                         />
                                                     </MDBCol>
-                                                    <MDBCol sm="12" md="6">
+                                                    <MDBCol sm="12" md="6" className="offset-md-3">
                                                     {
                                                         active.error.question_0.category_complant.length > 0 && 
                                                             <div data-aos="fade-top">

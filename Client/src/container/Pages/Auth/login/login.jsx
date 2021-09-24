@@ -220,7 +220,7 @@
                   </MDBRow>
                   <MDBRow>
                     <MDBCol md="12" sm="6" className="d-flex justify-content-center mt-5">
-                      <p className="font-large grey-text">
+                      {/* <p className="font-large grey-text">
                         Don't have an account?
                         <a
                           onClick={()=> this.toRegister()}
@@ -229,7 +229,7 @@
                         >
                           Sign up
                         </a>
-                      </p>
+                      </p> */}
                     </MDBCol>
                 </MDBRow>
               </MDBContainer>
